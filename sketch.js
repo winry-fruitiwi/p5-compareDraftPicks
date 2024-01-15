@@ -75,10 +75,10 @@ function keyPressed() {
         console.log(`debugCorner visibility set to ${debugCorner.visible}`)
     }
 
-    // if the user pressed anything else (other than backspace), modify the
+    // if the user pressed anything other than a modifier key, modify the
     // query string accordingly. Otherwise, remove the last character from
     // the query.
-    if (key !== "`" && keyCode !== BACKSPACE) {
+    if (key !== "`" && key.length === 1) {
         query += key
     } else if (keyCode === BACKSPACE)
         // delete the last element of query
