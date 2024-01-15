@@ -1,6 +1,16 @@
 /**
- *  @author 
- *  @date 2023.
+ *  @author Winry
+ *  @date 2024.1.14
+ *
+ *  Hello! I am Winry of the Nubcake Bakery, an unofficial team of four raiding
+ *  buddies who do criterion dungeons in Final Fantasy XIV Endwalker.
+ *
+ *  This project is like the p5.js version of py-util's compareDraftPicks
+ *  tool for Magic: The Gathering. This tool allows you to quickly and easily
+ *  compare the stats of multiple cards in the heat of an MTGA/MTGO draft,
+ *  or even a game. However, unlike the python version, this version of
+ *  compareDraftPicks should be able to operate completely on the screen when
+ *  finished instead of relying on text.
  *
  */
 
@@ -9,6 +19,11 @@ let fixedWidthFont
 let variableWidthFont
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
+
+// the string that you constantly modify by typing. Controls what cards
+// show up in the "what are you searching for?" box underneath the search
+// bar (WIP).
+let query = ""
 
 
 function preload() {
@@ -47,6 +62,7 @@ function draw() {
 
 
 function keyPressed() {
+    console.clear()
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
         noLoop()
@@ -58,6 +74,17 @@ function keyPressed() {
         debugCorner.visible = !debugCorner.visible
         console.log(`debugCorner visibility set to ${debugCorner.visible}`)
     }
+
+    // if the user pressed anything else (other than backspace), modify the
+    // query string accordingly. Otherwise, remove the last character from
+    // the query.
+    if (key !== "`" && keyCode !== BACKSPACE) {
+        query += key
+    } else if (keyCode === BACKSPACE)
+        // delete the last element of query
+        query = query.slice(0, -1)
+
+    print(query)
 }
 
 
