@@ -25,6 +25,14 @@ let debugCorner /* output debug text in the bottom left corner of the canvas */
 // bar (WIP).
 let query = ""
 
+// toggle to display the cursor
+let cursorDisplay = true
+
+// where the master JSON is stored
+let masterJSON
+
+// all card names
+let cardNames
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -45,6 +53,14 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    masterJSON = loadJSON("master.json", gotData)
+}
+
+
+function gotData() {
+    cardNames = Object.keys(masterJSON)
+    print(cardNames)
 }
 
 
@@ -57,7 +73,16 @@ function draw() {
     debugCorner.showBottom()
 
     textAlign(LEFT, TOP)
-    text(query, 0, 0)
+
+    // toggle cursorDisplay every 50 frames
+    if (frameCount % 50 === 0)
+        cursorDisplay = !cursorDisplay
+
+    // display the cursor if cursorDisplay is true
+    if (cursorDisplay)
+        text(query + "|", 0, 0)
+    else
+        text(query, 0, 0)
 
     if (frameCount > 3000)
         noLoop()
