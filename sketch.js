@@ -119,7 +119,16 @@ function keyPressed() {
         }
     }
 
-    print(Object.keys(queriedCards))
+    // sort the queried cards by where they were found
+    let queriedCardEntries = Object.entries(queriedCards)
+    queriedCardEntries.sort((a, b) => a[1] - b[1])
+
+    queriedCards = {}
+    for (const [key, value] of queriedCardEntries) {
+        queriedCards[key] = value
+    }
+
+    print(queriedCards)
 }
 
 
