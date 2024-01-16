@@ -56,13 +56,15 @@ function draw() {
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     debugCorner.showBottom()
 
+    textAlign(LEFT, TOP)
+    text(query, 0, 0)
+
     if (frameCount > 3000)
         noLoop()
 }
 
 
 function keyPressed() {
-    console.clear()
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
         noLoop()
@@ -83,8 +85,6 @@ function keyPressed() {
     } else if (keyCode === BACKSPACE)
         // delete the last element of query
         query = query.slice(0, -1)
-
-    print(query)
 }
 
 
