@@ -60,7 +60,6 @@ function setup() {
 
 function gotData() {
     cardNames = Object.keys(masterJSON)
-    print(cardNames)
 }
 
 
@@ -90,6 +89,7 @@ function draw() {
 
 
 function keyPressed() {
+    console.clear()
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
         noLoop()
@@ -110,6 +110,16 @@ function keyPressed() {
     } else if (keyCode === BACKSPACE)
         // delete the last element of query
         query = query.slice(0, -1)
+
+    // find list of all cards that include the query
+    let queriedCards = {}
+    for (let cardName of cardNames) {
+        if (cardName.indexOf(query) !== -1) {
+            queriedCards[cardName] = cardName.indexOf(query)
+        }
+    }
+
+    print(Object.keys(queriedCards))
 }
 
 
