@@ -114,8 +114,10 @@ function keyPressed() {
     // find list of all cards that include the query
     let queriedCards = {}
     for (let cardName of cardNames) {
-        if (cardName.indexOf(query) !== -1) {
-            queriedCards[cardName] = cardName.indexOf(query)
+        // do a search that's not case-sensitive
+        let cardNameQuery = cardName.toLowerCase().indexOf(query.toLowerCase())
+        if (cardNameQuery !== -1) {
+            queriedCards[cardName] = cardNameQuery
         }
     }
 
@@ -128,7 +130,8 @@ function keyPressed() {
         queriedCards[key] = value
     }
 
-    print(queriedCards)
+    for (let card of Object.keys(queriedCards))
+        print(card)
 }
 
 
