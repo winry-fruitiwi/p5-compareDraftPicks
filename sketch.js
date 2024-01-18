@@ -34,6 +34,14 @@ let masterJSON
 // all card names
 let cardNames
 
+// maximum characters allowed in the query
+const MAX_QUERY_LENGTH = 32
+
+/* constants */
+// the padding of the text box
+const TEXT_BOX_PADDING = 4
+
+
 function preload() {
     font = loadFont('data/consola.ttf')
     fixedWidthFont = loadFont('data/consola.ttf')
@@ -64,7 +72,7 @@ function gotData() {
 
 
 function draw() {
-    background(234, 34, 24)
+    background(0, 0, 9)
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
@@ -73,15 +81,25 @@ function draw() {
 
     textAlign(LEFT, TOP)
 
+    fill(0, 0, 20)
+    noStroke()
+    // display a grayish box for the query to go in (assumes monospace font).
+    // Also accounts for cursor.
+    rect(0, 0,
+        textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
+        textAscent() + textDescent() + TEXT_BOX_PADDING*2
+    )
+
+    fill(0, 0, 80)
     // toggle cursorDisplay every 50 frames
     if (frameCount % 50 === 0)
         cursorDisplay = !cursorDisplay
 
     // display the cursor if cursorDisplay is true
     if (cursorDisplay)
-        text(query + "|", 0, 0)
+        text(query + "|", TEXT_BOX_PADDING, TEXT_BOX_PADDING)
     else
-        text(query, 0, 0)
+        text(query, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
     if (frameCount > 3000)
         noLoop()
@@ -104,8 +122,9 @@ function keyPressed() {
 
     // if the user pressed anything other than a modifier key, modify the
     // query string accordingly. Otherwise, remove the last character from
-    // the query.
-    if (key !== "`" && key.length === 1) {
+    // the query. Also, if the length of the query exceeds the maximum
+    // character cap, don't add the character.
+    if (key !== "`" && key.length === 1 && query.length < MAX_QUERY_LENGTH) {
         query += key
     } else if (keyCode === BACKSPACE)
         // delete the last element of query
