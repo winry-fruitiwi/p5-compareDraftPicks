@@ -34,12 +34,15 @@ let masterJSON
 // all card names
 let cardNames
 
-// maximum characters allowed in the query
-const MAX_QUERY_LENGTH = 32
+// card names that are currently being queried for. Updated every time a
+// key is pressed, in keyPressed().
+let queriedCardNames = []
 
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
+// maximum characters allowed in the query
+const MAX_QUERY_LENGTH = 32
 
 
 function preload() {
@@ -101,6 +104,15 @@ function draw() {
     else
         text(query, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
+    // iterate over all the queried cards
+    for (let i = 0; i < queriedCardNames.length; i++) {
+        let cardName = queriedCardNames[i]
+
+        text(cardName,
+            TEXT_BOX_PADDING,
+            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING)*(i+1))
+    }
+
     if (frameCount > 3000)
         noLoop()
 }
@@ -151,6 +163,8 @@ function keyPressed() {
 
     for (let card of Object.keys(queriedCards))
         print(card)
+
+    queriedCardNames = Object.keys(queriedCards)
 }
 
 
