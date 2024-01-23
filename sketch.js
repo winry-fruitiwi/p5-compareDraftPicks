@@ -75,12 +75,8 @@ function gotData() {
 
 
 function draw() {
+    rectMode(CORNER)
     background(0, 0, 9)
-
-    /* debugCorner needs to be last so its z-index is highest */
-    debugCorner.setText(`frameCount: ${frameCount}`, 2)
-    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    debugCorner.showBottom()
 
     textAlign(LEFT, TOP)
 
@@ -108,10 +104,23 @@ function draw() {
     for (let i = 0; i < queriedCardNames.length; i++) {
         let cardName = queriedCardNames[i]
 
+        fill(0, 33*i, 50)
+        rect(0,
+            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING)*(i + 1),
+            textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
+            textAscent() + textDescent() + TEXT_BOX_PADDING*2
+            )
+
+        fill(0, 0, 80)
         text(cardName,
             TEXT_BOX_PADDING,
             TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING)*(i+1))
     }
+
+    /* debugCorner needs to be last so its z-index is highest */
+    debugCorner.setText(`frameCount: ${frameCount}`, 2)
+    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
+    debugCorner.showBottom()
 
     if (frameCount > 3000)
         noLoop()
