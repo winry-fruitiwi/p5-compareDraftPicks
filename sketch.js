@@ -104,17 +104,20 @@ function draw() {
     for (let i = 0; i < queriedCardNames.length; i++) {
         let cardName = queriedCardNames[i]
 
-        fill(0, 33*i, 50)
+        fill(0, 0, 50)
+        strokeWeight(1)
+        stroke(0, 0, 0)
         rect(0,
-            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING)*(i + 1),
+            (textAscent()+textDescent()+TEXT_BOX_PADDING * 2)*(i + 1),
             textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
             textAscent() + textDescent() + TEXT_BOX_PADDING*2
             )
 
         fill(0, 0, 80)
+        noStroke()
         text(cardName,
             TEXT_BOX_PADDING,
-            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING)*(i+1))
+            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING * 2)*(i+1))
     }
 
     /* debugCorner needs to be last so its z-index is highest */
