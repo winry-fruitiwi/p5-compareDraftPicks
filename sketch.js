@@ -38,11 +38,17 @@ let cardNames
 // key is pressed, in keyPressed().
 let queriedCardNames = []
 
+// the minimum height that the canvas needs to be to accommodate all the
+// elements in the sketch
+let requiredHeight = 0
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
 // maximum characters allowed in the query
 const MAX_QUERY_LENGTH = 32
+// minimum width required for all elements in the sketch
+const REQUIRED_WIDTH = 600
 
 
 function preload() {
@@ -75,6 +81,10 @@ function gotData() {
 
 
 function draw() {
+    if ((height !== requiredHeight) || (width !== REQUIRED_WIDTH)) {
+        resizeCanvas(REQUIRED_WIDTH, requiredHeight, true)
+    }
+
     rectMode(CORNER)
     background(0, 0, 9)
 
@@ -86,7 +96,7 @@ function draw() {
     // Also accounts for cursor.
     rect(0, 0,
         textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
-        textAscent() + textDescent() + TEXT_BOX_PADDING*2
+        textHeight() + TEXT_BOX_PADDING*2
     )
 
     fill(0, 0, 80)
@@ -100,6 +110,8 @@ function draw() {
     else
         text(query, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
+    let cellHeight = (textHeight()+TEXT_BOX_PADDING * 2)
+
     // iterate over all the queried cards
     for (let i = 0; i < queriedCardNames.length; i++) {
         let cardName = queriedCardNames[i]
@@ -108,22 +120,24 @@ function draw() {
         strokeWeight(1)
         stroke(0, 0, 0)
         rect(0,
-            (textAscent()+textDescent()+TEXT_BOX_PADDING * 2)*(i + 1),
+            cellHeight*(i + 1),
             textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
-            textAscent() + textDescent() + TEXT_BOX_PADDING*2
+            textHeight() + TEXT_BOX_PADDING*2
             )
 
         fill(0, 0, 80)
         noStroke()
         text(cardName,
             TEXT_BOX_PADDING,
-            TEXT_BOX_PADDING + (textAscent()+textDescent()+TEXT_BOX_PADDING * 2)*(i+1))
+            TEXT_BOX_PADDING + cellHeight*(i+1))
     }
+
+    requiredHeight = TEXT_BOX_PADDING + cellHeight*(queriedCardNames.length+1)
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    debugCorner.showBottom()
+    // debugCorner.showBottom()
 
     if (frameCount > 3000)
         noLoop()
@@ -180,6 +194,12 @@ function keyPressed() {
 }
 
 
+// just a code cleanup function
+function textHeight() {
+    return textAscent() + textDescent()
+}
+
+
 /** 🧹 shows debugging info using text() 🧹 */
 class CanvasDebugCorner {
     constructor(lines) {
@@ -204,7 +224,7 @@ class CanvasDebugCorner {
             const LEFT_MARGIN = 10
             const DEBUG_Y_OFFSET = height - 10 /* floor of debug corner */
             const LINE_SPACING = 2
-            const LINE_HEIGHT = textAscent() + textDescent() + LINE_SPACING
+            const LINE_HEIGHT = textHeight() + LINE_SPACING
 
             /* semi-transparent background */
             fill(0, 0, 0, 10)
@@ -238,7 +258,7 @@ class CanvasDebugCorner {
             /* offset from top of canvas */
             const DEBUG_Y_OFFSET = textAscent() + TOP_PADDING
             const LINE_SPACING = 2
-            const LINE_HEIGHT = textAscent() + textDescent() + LINE_SPACING
+            const LINE_HEIGHT = textHeight() + LINE_SPACING
 
             /* semi-transparent background, a console-like feel */
             fill(0, 0, 0, 10)
