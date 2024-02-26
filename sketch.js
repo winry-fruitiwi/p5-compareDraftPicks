@@ -117,6 +117,17 @@ function draw() {
         let cardName = queriedCardNames[i]
 
         fill(0, 0, 50)
+
+        // check if I'm hovering over this card name
+        if (
+            0 < mouseX &&
+            cellHeight*(i+1) < mouseY &&
+            mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
+            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
+        ) {
+            fill(0, 0, 40)
+        }
+
         strokeWeight(1)
         stroke(0, 0, 0)
         rect(0,
