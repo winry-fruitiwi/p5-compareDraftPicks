@@ -42,6 +42,12 @@ let queriedCardNames = []
 // elements in the sketch
 let requiredHeight = 0
 
+// the cards I've selected after querying them
+let selectedCards = []
+
+// if I just released the mouse
+let mouseJustReleased = false
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -126,7 +132,15 @@ function draw() {
             mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
         ) {
             fill(0, 0, 40)
+
+            // if I also just clicked on this card, add it to the list of
+            // cards I've selected
+            if (mouseJustReleased) {
+                selectedCards.push(cardName)
+            }
         }
+        if (selectedCards.includes(cardName))
+            fill(0, 30, 80)
 
         strokeWeight(1)
         stroke(0, 0, 0)
@@ -149,6 +163,8 @@ function draw() {
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     // debugCorner.showBottom()
+
+    mouseJustReleased = false
 
     if (frameCount > 3000)
         noLoop()
@@ -208,6 +224,11 @@ function keyPressed() {
 // just a code cleanup function
 function textHeight() {
     return textAscent() + textDescent()
+}
+
+
+function mouseReleased() {
+    mouseJustReleased = true
 }
 
 
