@@ -133,14 +133,31 @@ function draw() {
         ) {
             fill(0, 0, 40)
 
-            // if I also just clicked on this card, add it to the list of
-            // cards I've selected
+            // if I also just clicked on this card, either add it to or remove
+            // it from the list of cards selected
             if (mouseJustReleased) {
-                selectedCards.push(cardName)
+
+                if (!selectedCards.includes(cardName))
+                    selectedCards.push(cardName)
+                else {
+                    let cardIndex = selectedCards.indexOf(cardName)
+                    // starting from cardIndex, remove 1 element
+                    selectedCards.splice(cardIndex, 1)
+                }
             }
         }
-        if (selectedCards.includes(cardName))
-            fill(0, 30, 80)
+        if (selectedCards.includes(cardName)) {
+            fill(100, 60, 60)
+
+            if (
+                0 < mouseX &&
+                cellHeight*(i+1) < mouseY &&
+                mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
+                mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
+            ) {
+                fill(100, 60, 50)
+            }
+        }
 
         strokeWeight(1)
         stroke(0, 0, 0)
