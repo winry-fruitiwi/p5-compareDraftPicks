@@ -94,6 +94,18 @@ function draw() {
     rectMode(CORNER)
     background(0, 0, 9)
 
+    // adds the "Query Data" button at the top.
+    // note that "Query Data (WIP)" is displayed if I'm still working on it.
+    fill(0, 0, 40)
+    rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
+        textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
+        textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
+
+
+    textAlign(RIGHT, TOP)
+    fill(0, 0, 80)
+    text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
+
     textAlign(LEFT, TOP)
 
     fill(0, 0, 20)
@@ -122,7 +134,7 @@ function draw() {
     for (let i = 0; i < queriedCardNames.length; i++) {
         let cardName = queriedCardNames[i]
 
-        fill(0, 0, 50)
+        fill(0, 0, 40)
 
         // check if I'm hovering over this card name
         if (
@@ -131,7 +143,7 @@ function draw() {
             mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
             mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
         ) {
-            fill(0, 0, 40)
+            fill(0, 0, 30)
 
             // if I also just clicked on this card, either add it to or remove
             // it from the list of cards selected
