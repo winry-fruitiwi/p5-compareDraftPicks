@@ -45,6 +45,9 @@ let requiredHeight = 0
 // the cards I've selected after querying them
 let selectedCards = []
 
+// the cards I'm about to display after selecting them
+let cardsToDisplay = []
+
 // if I just released the mouse
 let mouseJustReleased = false
 
@@ -93,18 +96,6 @@ function draw() {
 
     rectMode(CORNER)
     background(0, 0, 9)
-
-    // adds the "Query Data" button at the top.
-    // note that "Query Data (WIP)" is displayed if I'm still working on it.
-    fill(0, 0, 40)
-    rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
-        textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
-        textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
-
-
-    textAlign(RIGHT, TOP)
-    fill(0, 0, 80)
-    text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
     textAlign(LEFT, TOP)
 
@@ -164,7 +155,7 @@ function draw() {
             if (
                 0 < mouseX &&
                 cellHeight*(i+1) < mouseY &&
-                mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
+                mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1)+TEXT_BOX_PADDING*2 &&
                 mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
             ) {
                 fill(100, 60, 50)
@@ -186,7 +177,44 @@ function draw() {
             TEXT_BOX_PADDING + cellHeight*(i+1))
     }
 
+    // also display all the cards ready to display (for next commit)
+
     requiredHeight = TEXT_BOX_PADDING + cellHeight*(queriedCardNames.length+1)
+
+    // adds the "Query Data" button at the top.
+    // note that "Query Data (WIP)" is displayed if I'm still working on it.
+    fill(0, 0, 40)
+    // coordinates for the rect. This is just to make the hover check simpler.
+    let topLeftQueryPos = new p5.Vector(
+        width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0
+    )
+
+    let bottomRightQueryPos = new p5.Vector(
+        width, textAscent() + textDescent() + TEXT_BOX_PADDING * 2
+    )
+
+    if (
+        topLeftQueryPos.x < mouseX &&
+        topLeftQueryPos.y < mouseY &&
+        mouseX < bottomRightQueryPos.x &&
+        mouseY < bottomRightQueryPos.y
+    ) {
+        fill(0, 0, 30)
+
+        if (mouseJustReleased) {
+            cardsToDisplay = selectedCards
+            print("data query button pressed!")
+        }
+    }
+
+    rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
+        textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
+        textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
+
+
+    textAlign(RIGHT, TOP)
+    fill(0, 0, 80)
+    text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
