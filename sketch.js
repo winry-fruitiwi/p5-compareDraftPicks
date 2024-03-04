@@ -177,9 +177,23 @@ function draw() {
             TEXT_BOX_PADDING + cellHeight*(i+1))
     }
 
-    // also display all the cards ready to display (for next commit)
+    // also display all the cards ready to display
+    for (let i = 0; i < cardsToDisplay.length; i++) {
+        let cardName = cardsToDisplay[i]
+        // display them in the same manner as last time, just without
+        // the background or border
+        fill(0, 0, 80)
+        noStroke()
+        // *3 because we want to display this to the right of the text box
+        // plus a small margin/padding
+        text(cardName,
+            textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*3,
+            TEXT_BOX_PADDING + cellHeight*(i))
+    }
 
-    requiredHeight = TEXT_BOX_PADDING + cellHeight*(queriedCardNames.length+1)
+    let longestListLength = max(queriedCardNames.length+1, cardsToDisplay.length)
+
+    requiredHeight = TEXT_BOX_PADDING + cellHeight*(longestListLength)
 
     // adds the "Query Data" button at the top.
     // note that "Query Data (WIP)" is displayed if I'm still working on it.
@@ -202,7 +216,7 @@ function draw() {
         fill(0, 0, 30)
 
         if (mouseJustReleased) {
-            cardsToDisplay = selectedCards
+            cardsToDisplay = selectedCards.slice()
             print("data query button pressed!")
         }
     }
