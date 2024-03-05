@@ -217,7 +217,14 @@ function draw() {
 
         if (mouseJustReleased) {
             cardsToDisplay = selectedCards.slice()
-            print("data query button pressed!")
+
+            for (let i = 0; i < cardsToDisplay.length; i++) {
+                let cardName = cardsToDisplay[i]
+
+                console.log(`${cardName}: ` +
+                    JSON.stringify(masterJSON[cardName], null, 2)
+                )
+            }
         }
     }
 
@@ -243,7 +250,6 @@ function draw() {
 
 
 function keyPressed() {
-    console.clear()
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
         noLoop()
@@ -284,9 +290,6 @@ function keyPressed() {
     for (const [key, value] of queriedCardEntries) {
         queriedCards[key] = value
     }
-
-    for (let card of Object.keys(queriedCards))
-        print(card)
 
     queriedCardNames = Object.keys(queriedCards)
 }
