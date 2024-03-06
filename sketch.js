@@ -4,6 +4,8 @@
  *
  *  Hello! I am Winry of the Nubcake Bakery, an unofficial team of four raiding
  *  buddies who do criterion dungeons in Final Fantasy XIV Endwalker.
+ *  We are thinking of expanding our team to 8 raiding buddies, including Owen.
+ *  This way we can do Pandaemonium Savages.
  *
  *  This project is like the p5.js version of py-util's compareDraftPicks
  *  tool for Magic: The Gathering. This tool allows you to quickly and easily
@@ -91,12 +93,28 @@ function gotData() {
 
 function draw() {
     if ((height !== requiredHeight) || (width !== REQUIRED_WIDTH)) {
+        // make sure NOT to redraw after resizing
         resizeCanvas(REQUIRED_WIDTH, requiredHeight, true)
     }
 
     rectMode(CORNER)
     background(0, 0, 9)
 
+    cardQueryDisplay()
+
+    /* debugCorner needs to be last so its z-index is highest */
+    debugCorner.setText(`frameCount: ${frameCount}`, 2)
+    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
+    // debugCorner.showBottom()
+
+    mouseJustReleased = false
+
+    if (frameCount > 3000)
+        noLoop()
+}
+
+
+function cardQueryDisplay() {
     textAlign(LEFT, TOP)
 
     fill(0, 0, 20)
@@ -168,7 +186,7 @@ function draw() {
             cellHeight*(i + 1),
             textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
             textHeight() + TEXT_BOX_PADDING*2
-            )
+        )
 
         fill(0, 0, 80)
         noStroke()
@@ -236,16 +254,6 @@ function draw() {
     textAlign(RIGHT, TOP)
     fill(0, 0, 80)
     text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
-
-    /* debugCorner needs to be last so its z-index is highest */
-    debugCorner.setText(`frameCount: ${frameCount}`, 2)
-    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    // debugCorner.showBottom()
-
-    mouseJustReleased = false
-
-    if (frameCount > 3000)
-        noLoop()
 }
 
 
