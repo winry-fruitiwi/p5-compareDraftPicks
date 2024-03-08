@@ -50,6 +50,10 @@ let selectedCards = []
 // the cards I'm about to display after selecting them
 let cardsToDisplay = []
 
+// the amount to shift cardQueryDisplay down so that it does not overlap with
+// cardDataDisplay
+let cardQueryShiftY = 0
+
 // if I just released the mouse
 let mouseJustReleased = false
 
@@ -107,9 +111,9 @@ function draw() {
     // cardQueryDisplay() doesn't run into cardDataDisplay()'s
     // display. translation computed in cardDataDisplay()
     push()
+    translate(0, cardQueryShiftY)
 
     cardQueryDisplay()
-
     pop()
 
     /* debugCorner needs to be last so its z-index is highest */
@@ -126,7 +130,10 @@ function draw() {
 
 // displays the static card data module, which shows previously queried data
 function cardDataDisplay() {
+    // used for displaying card names
+    let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
+    cardQueryShiftY = cellHeight * cardsToDisplay.length
 }
 
 // displays the interactive card querying module, which handles querying each
@@ -154,7 +161,7 @@ function cardQueryDisplay() {
     else
         text(query, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
-    let cellHeight = (textHeight()+TEXT_BOX_PADDING * 2)
+    let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
     // iterate over all the queried cards
     for (let i = 0; i < queriedCardNames.length; i++) {
@@ -228,7 +235,8 @@ function cardQueryDisplay() {
 
     let longestListLength = max(queriedCardNames.length+1, selectedCards.length)
 
-    requiredHeight = TEXT_BOX_PADDING + cellHeight*(longestListLength)
+    requiredHeight = cardQueryShiftY
+    requiredHeight += TEXT_BOX_PADDING + cellHeight*(longestListLength)
 
     // adds the "Query Data" button at the top.
     // note that "Query Data (WIP)" is displayed if I'm still working on it.
