@@ -59,7 +59,7 @@ const TEXT_BOX_PADDING = 4
 // maximum characters allowed in the query
 const MAX_QUERY_LENGTH = 32
 // minimum width required for all elements in the sketch
-const REQUIRED_WIDTH = 600
+const REQUIRED_WIDTH = 800
 
 
 function preload() {
@@ -100,7 +100,17 @@ function draw() {
     rectMode(CORNER)
     background(0, 0, 9)
 
+    // does nothing currently
+    cardDataDisplay()
+
+    // no translation right now, but I need to do this so that
+    // cardQueryDisplay() doesn't run into cardDataDisplay()'s
+    // display. translation computed in cardDataDisplay()
+    push()
+
     cardQueryDisplay()
+
+    pop()
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
@@ -114,6 +124,13 @@ function draw() {
 }
 
 
+// displays the static card data module, which shows previously queried data
+function cardDataDisplay() {
+
+}
+
+// displays the interactive card querying module, which handles querying each
+// card and the "query data" button
 function cardQueryDisplay() {
     textAlign(LEFT, TOP)
 
@@ -196,8 +213,8 @@ function cardQueryDisplay() {
     }
 
     // also display all the cards ready to display
-    for (let i = 0; i < cardsToDisplay.length; i++) {
-        let cardName = cardsToDisplay[i]
+    for (let i = 0; i < selectedCards.length; i++) {
+        let cardName = selectedCards[i]
         // display them in the same manner as last time, just without
         // the background or border
         fill(0, 0, 80)
@@ -209,7 +226,7 @@ function cardQueryDisplay() {
             TEXT_BOX_PADDING + cellHeight*(i))
     }
 
-    let longestListLength = max(queriedCardNames.length+1, cardsToDisplay.length)
+    let longestListLength = max(queriedCardNames.length+1, selectedCards.length)
 
     requiredHeight = TEXT_BOX_PADDING + cellHeight*(longestListLength)
 
@@ -236,8 +253,8 @@ function cardQueryDisplay() {
         if (mouseJustReleased) {
             cardsToDisplay = selectedCards.slice()
 
-            for (let i = 0; i < cardsToDisplay.length; i++) {
-                let cardName = cardsToDisplay[i]
+            for (let i = 0; i < selectedCards.length; i++) {
+                let cardName = selectedCards[i]
 
                 console.log(`${cardName}: ` +
                     JSON.stringify(masterJSON[cardName], null, 2)
@@ -300,6 +317,10 @@ function keyPressed() {
     }
 
     queriedCardNames = Object.keys(queriedCards)
+
+    if (query.length === 0) {
+        queriedCardNames = []
+    }
 }
 
 
