@@ -133,6 +133,15 @@ function cardDataDisplay() {
     // used for displaying card names
     let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
+    for (let i=0; i < cardsToDisplay.length; i++) {
+        textAlign(LEFT, TOP)
+
+        let cardName = cardsToDisplay[i]
+
+        fill(0, 0, 80)
+        text(cardName, TEXT_BOX_PADDING, cellHeight * i + TEXT_BOX_PADDING)
+    }
+
     cardQueryShiftY = cellHeight * cardsToDisplay.length
 }
 
