@@ -181,9 +181,9 @@ function cardQueryDisplay() {
         // check if I'm hovering over this card name
         if (
             0 < mouseX &&
-            cellHeight*(i+1) < mouseY &&
+            cellHeight*(i+1) + cardQueryShiftY < mouseY &&
             mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
-            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
+            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
         ) {
             fill(0, 0, 30)
 
@@ -205,9 +205,9 @@ function cardQueryDisplay() {
 
             if (
                 0 < mouseX &&
-                cellHeight*(i+1) < mouseY &&
+                cellHeight*(i+1) + cardQueryShiftY < mouseY &&
                 mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1)+TEXT_BOX_PADDING*2 &&
-                mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
+                mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
             ) {
                 fill(100, 60, 50)
             }
@@ -261,9 +261,9 @@ function cardQueryDisplay() {
 
     if (
         topLeftQueryPos.x < mouseX &&
-        topLeftQueryPos.y < mouseY &&
+        topLeftQueryPos.y + cardQueryShiftY < mouseY &&
         mouseX < bottomRightQueryPos.x &&
-        mouseY < bottomRightQueryPos.y
+        mouseY < bottomRightQueryPos.y + cardQueryShiftY
     ) {
         fill(0, 0, 30)
 
