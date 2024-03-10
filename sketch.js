@@ -138,6 +138,13 @@ function cardDataDisplay() {
 
         let cardName = cardsToDisplay[i]
 
+        // this essentially alternates alpha between 0 and 20
+        fill(0, 0, 100, i % 2 * 5)
+        noStroke()
+        rect(0, cellHeight * i,
+            width, cellHeight
+            )
+
         fill(0, 0, 80)
         text(cardName, TEXT_BOX_PADDING, cellHeight * i + TEXT_BOX_PADDING)
     }
