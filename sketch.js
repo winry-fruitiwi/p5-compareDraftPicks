@@ -138,15 +138,28 @@ function cardDataDisplay() {
 
         let cardName = cardsToDisplay[i]
 
+        // display alternating color rectangle
+        noStroke()
         // this essentially alternates alpha between 0 and 20
         fill(0, 0, 100, i % 2 * 5)
-        noStroke()
         rect(0, cellHeight * i,
             width, cellHeight
             )
 
+        // display card name
         fill(0, 0, 80)
         text(cardName, TEXT_BOX_PADDING, cellHeight * i + TEXT_BOX_PADDING)
+
+        // display winrate
+        textAlign(RIGHT, TOP)
+        if (masterJSON[cardName]["stats"]["all"]["all"]) {
+            let gihWR = masterJSON[cardName]["stats"]["all"]["all"]["GIH WR"]
+            text(gihWR, width - TEXT_BOX_PADDING,
+                cellHeight * i + TEXT_BOX_PADDING)
+        } else {
+            text("No data", width - TEXT_BOX_PADDING,
+                cellHeight * i + TEXT_BOX_PADDING)
+        }
     }
 
     cardQueryShiftY = cellHeight * cardsToDisplay.length
