@@ -154,7 +154,17 @@ function cardDataDisplay() {
         textAlign(RIGHT, TOP)
         if (masterJSON[cardName]["stats"]["all"]["all"]) {
             let gihWR = masterJSON[cardName]["stats"]["all"]["all"]["GIH WR"]
-            text(gihWR, width - TEXT_BOX_PADDING,
+
+            // get the first three digits and round everything else away
+            let formattedWR = round(gihWR * 1000)
+            // after this, convert to a string
+            formattedWR = str(formattedWR)
+            // then add the decimal point
+            formattedWR = formattedWR.slice(0, 2) + "." + formattedWR.slice(2)
+            // finally, add the % at the end
+            formattedWR += "%"
+
+            text(formattedWR, width - TEXT_BOX_PADDING,
                 cellHeight * i + TEXT_BOX_PADDING)
         } else {
             text("No data", width - TEXT_BOX_PADDING,
