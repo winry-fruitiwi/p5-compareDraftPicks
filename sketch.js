@@ -57,6 +57,9 @@ let cardQueryShiftY = 0
 // if I just released the mouse
 let mouseJustReleased = false
 
+// the caliber of data I'm querying: top vs all players. false = all, true = top
+let caliber = false
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -133,6 +136,26 @@ function cardDataDisplay() {
     // used for displaying card names
     let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
+    // check if the data queried should be from top or all players using
+    // the caliber variable
+    let caliberQuery
+    if (caliber) {
+        caliberQuery = "Top"
+    } else {
+        caliberQuery = "All"
+    }
+
+    let caliberButtonText = `Toggle Caliber: ${caliberQuery}`
+
+    noStroke()
+    fill(0, 0, 50)
+    rect(0, 0, textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING, cellHeight)
+
+    textAlign(LEFT, TOP)
+    fill(0, 0, 80)
+    text(caliberButtonText, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
+
+
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
 
@@ -141,18 +164,18 @@ function cardDataDisplay() {
         // display alternating color rectangle
         noStroke()
         // this essentially alternates alpha between 0 and 20
-        fill(0, 0, 100, i % 2 * 5)
-        rect(0, cellHeight * i,
+        fill(0, 0, 100, (i + 1) % 2 * 5)
+        rect(0, cellHeight * (i + 1),
             width, cellHeight
             )
 
         // display card name
         fill(0, 0, 80)
-        text(cardName, TEXT_BOX_PADDING, cellHeight * i + TEXT_BOX_PADDING)
+        text(cardName, TEXT_BOX_PADDING, cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
         // display winrate
         textAlign(RIGHT, TOP)
-        if (masterJSON[cardName]["stats"]["all"]["all"]) {
+        if (masterJSON[cardName]["stats"][caliberQuery]["all"]) {
             let gihWR = masterJSON[cardName]["stats"]["all"]["all"]["GIH WR"]
 
             // get the first three digits and round everything else away
@@ -165,14 +188,14 @@ function cardDataDisplay() {
             formattedWR += "%"
 
             text(formattedWR, width - TEXT_BOX_PADDING,
-                cellHeight * i + TEXT_BOX_PADDING)
+                cellHeight * (i + 1) + TEXT_BOX_PADDING)
         } else {
             text("No data", width - TEXT_BOX_PADDING,
-                cellHeight * i + TEXT_BOX_PADDING)
+                cellHeight * (i + 1) + TEXT_BOX_PADDING)
         }
     }
 
-    cardQueryShiftY = cellHeight * cardsToDisplay.length
+    cardQueryShiftY = cellHeight + cellHeight * cardsToDisplay.length
 }
 
 // displays the interactive card querying module, which handles querying each
