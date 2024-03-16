@@ -138,17 +138,33 @@ function cardDataDisplay() {
 
     // check if the data queried should be from top or all players using
     // the caliber variable
-    let caliberQuery
+    let caliberQuery, caliberText
     if (caliber) {
-        caliberQuery = "Top"
+        caliberText = "Top"
+        caliberQuery = "top"
     } else {
-        caliberQuery = "All"
+        caliberText = "All"
+        caliberQuery = "all"
     }
 
-    let caliberButtonText = `Toggle Caliber: ${caliberQuery}`
+    let caliberButtonText = `Toggle Caliber: ${caliberText}`
 
     noStroke()
     fill(0, 0, 50)
+
+    if (
+        mouseX > 0 &&
+        mouseY > 0 &&
+        textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING > mouseX &&
+        cellHeight > mouseY
+    ) {
+        fill(0, 0, 40)
+
+        if (mouseJustReleased) {
+            caliber = !caliber
+        }
+    }
+
     rect(0, 0, textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING, cellHeight)
 
     textAlign(LEFT, TOP)
@@ -176,7 +192,7 @@ function cardDataDisplay() {
         // display winrate
         textAlign(RIGHT, TOP)
         if (masterJSON[cardName]["stats"][caliberQuery]["all"]) {
-            let gihWR = masterJSON[cardName]["stats"]["all"]["all"]["GIH WR"]
+            let gihWR = masterJSON[cardName]["stats"][caliberQuery]["all"]["GIH WR"]
 
             // get the first three digits and round everything else away
             let formattedWR = round(gihWR * 1000)
