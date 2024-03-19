@@ -171,6 +171,28 @@ function cardDataDisplay() {
     fill(0, 0, 80)
     text(caliberButtonText, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
+    // colors to display
+    let colors = [
+        "W",
+        "U",
+        "B",
+        "R",
+        "G"
+    ]
+    let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 20
+    let d = 22
+    let colorCircleMargin = 10
+
+    noStroke()
+    fill(0, 0, 15)
+
+    for (let i=0; i < colors.length; i++) {
+        circle(
+            circleStartPos + i * (d + colorCircleMargin),
+            cellHeight/2,
+            d
+        )
+    }
 
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
