@@ -179,18 +179,25 @@ function cardDataDisplay() {
         "R",
         "G"
     ]
-    let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 20
+    let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
     let d = 22
     let colorCircleMargin = 10
 
     noStroke()
-    fill(0, 0, 15)
 
     for (let i=0; i < colors.length; i++) {
+        fill(0, 0, 15)
         circle(
             circleStartPos + i * (d + colorCircleMargin),
             cellHeight/2,
             d
+        )
+
+        fill(0, 0, 40)
+        textAlign(CENTER, CENTER)
+        text(colors[i],
+            circleStartPos + i * (d + colorCircleMargin),
+            cellHeight/2
         )
     }
 
