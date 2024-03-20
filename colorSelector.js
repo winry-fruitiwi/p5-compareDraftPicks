@@ -1,6 +1,9 @@
 class ColorSelector {
-    constructor(color, displayColor) {
-        // define current color and the color it takes on
+    constructor(displayColor) {
+        // define color, used when rendered
+        this.displayColor = displayColor
+
+        this.selected = false
     }
 
     toggleSelection() {}
