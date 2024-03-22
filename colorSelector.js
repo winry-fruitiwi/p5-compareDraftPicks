@@ -13,7 +13,9 @@ class ColorSelector {
         this.selected = !this.selected
     }
 
-    currentValue() {}
+    currentValue() {
+        return this.selected
+    }
 
     // requires display arguments because it won't have a set position all
     // the time
