@@ -60,6 +60,10 @@ let mouseJustReleased = false
 // the caliber of data I'm querying: top vs all players. false = all, true = top
 let caliber = false
 
+let colorStrip
+
+let cellHeight
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -90,6 +94,10 @@ function setup() {
     debugCorner = new CanvasDebugCorner(5)
 
     masterJSON = loadJSON("master.json", gotData)
+
+    colorStrip = new ColorStrip()
+
+    cellHeight = textHeight() + TEXT_BOX_PADDING*2
 }
 
 
@@ -134,7 +142,7 @@ function draw() {
 // displays the static card data module, which shows previously queried data
 function cardDataDisplay() {
     // used for displaying card names
-    let cellHeight = textHeight() + TEXT_BOX_PADDING*2
+
 
     // check if the data queried should be from top or all players using
     // the caliber variable
@@ -171,35 +179,8 @@ function cardDataDisplay() {
     fill(0, 0, 80)
     text(caliberButtonText, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
-    // colors to display
-    let colors = [
-        "W",
-        "U",
-        "B",
-        "R",
-        "G"
-    ]
     let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
-    let d = 22
-    let colorCircleMargin = 10
-
-    noStroke()
-
-    for (let i=0; i < colors.length; i++) {
-        fill(0, 0, 15)
-        circle(
-            circleStartPos + i * (d + colorCircleMargin),
-            cellHeight/2,
-            d
-        )
-
-        fill(0, 0, 40)
-        textAlign(CENTER, CENTER)
-        text(colors[i],
-            circleStartPos + i * (d + colorCircleMargin),
-            cellHeight/2
-        )
-    }
+    colorStrip.render(circleStartPos, cellHeight/2)
 
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
@@ -267,8 +248,6 @@ function cardQueryDisplay() {
         text(query + "|", TEXT_BOX_PADDING, TEXT_BOX_PADDING)
     else
         text(query, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
-
-    let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
     // iterate over all the queried cards
     for (let i = 0; i < queriedCardNames.length; i++) {

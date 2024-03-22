@@ -19,7 +19,7 @@ class ColorStrip {
             let key = colorKeys[i]
             let value = colorValues[i]
 
-            this.selectors[key] = new ColorSelector(value)
+            this.selectors[key] = new ColorSelector(value, key)
         }
     }
 
@@ -27,5 +27,15 @@ class ColorStrip {
 
     currentValues() {}
 
-    render(x, y) {}
+    render(x, y) {
+        // colors to display
+        let colors = Object.keys(this.selectors)
+        let colorCircleMargin = 10
+
+        for (let i=0; i < colors.length; i++) {
+            let selector = Object.values(this.selectors)[i]
+
+            selector.render(x + i * (colorCircleMargin + cellHeight), y)
+        }
+    }
 }
