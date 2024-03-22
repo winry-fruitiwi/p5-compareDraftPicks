@@ -2,11 +2,11 @@ class ColorStrip {
     constructor() {
         // initialize list of colors, pulled from mtgCombatTricks
         let colors = {
-            "W": [62, 20, 94],
-            "U": [208, 20, 89],
-            "B": [26, 10, 67],
-            "R": [17, 54, 85],
-            "G": [100, 27, 70]
+            "W": color(62, 20, 94),
+            "U": color(208, 30, 89),
+            "B": color(26, 10, 67),
+            "R": color(17, 64, 85),
+            "G": color(100, 37, 70)
         }
 
         // initialize the list of color selectors and populate it with
