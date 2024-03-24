@@ -182,6 +182,47 @@ function cardDataDisplay() {
     let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
     colorStrip.render(circleStartPos, cellHeight/2)
 
+    let currentlySelected = colorStrip.currentlySelected()
+
+    noStroke()
+    textAlign(RIGHT, TOP)
+    if (currentlySelected.length === 2) {
+        let buttonText = "select: " + currentlySelected
+
+        fill(0, 0, 40)
+        rect(
+            width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
+            0,
+            TEXT_BOX_PADDING * 2 + textWidth(buttonText),
+            cellHeight
+        )
+
+        fill(0, 0, 80)
+        text(buttonText,
+            width - TEXT_BOX_PADDING,
+            TEXT_BOX_PADDING)
+    } else if (currentlySelected.length === 0) {
+        let buttonText = "select: all"
+
+        fill(0, 0, 40)
+        rect(
+            width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
+            0,
+            TEXT_BOX_PADDING * 2 + textWidth(buttonText),
+            cellHeight
+        )
+
+        fill(0, 0, 80)
+        text(buttonText,
+            width - TEXT_BOX_PADDING,
+            TEXT_BOX_PADDING)
+    } else {
+        fill(0, 0, 80)
+        text("please select 0 or 2 colors",
+            width - TEXT_BOX_PADDING,
+            TEXT_BOX_PADDING)
+    }
+
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
 
@@ -221,7 +262,7 @@ function cardDataDisplay() {
         }
     }
 
-    cardQueryShiftY = cellHeight + cellHeight * cardsToDisplay.length
+    cardQueryShiftY = cellHeight + cellHeight * cardsToDisplay.length + 10
 }
 
 // displays the interactive card querying module, which handles querying each

@@ -30,7 +30,7 @@ class ColorStrip {
     // returns currently selected colors' ID (aka if this.selectors' W and U
     // selectors were on, the list would return ["W", "U"]
     currentlySelected() {
-        let currentColors = []
+        let currentColors = ""
         let colorKeys = Object.keys(this.selectors)
         let colorValues = Object.values(this.selectors)
 
@@ -39,7 +39,7 @@ class ColorStrip {
             let selector = colorValues[i]
 
             if (selector.currentValue()) {
-                currentColors.push(selectorID)
+                currentColors += selectorID
             }
         }
 
