@@ -60,6 +60,9 @@ let mouseJustReleased = false
 // the caliber of data I'm querying: top vs all players. false = all, true = top
 let caliber = false
 
+// color pair of data I'm querying
+let colorPair = "all"
+
 let colorStrip
 
 let cellHeight
@@ -190,6 +193,19 @@ function cardDataDisplay() {
         let buttonText = "select: " + currentlySelected
 
         fill(0, 0, 40)
+        if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
+            mouseY > 0 &&
+            width > mouseX &&
+            cellHeight > mouseY
+        ) {
+            fill(0, 0, 30)
+            print("pressed color pair switcher: color pair")
+
+            if (mouseJustReleased) {
+                colorPair = currentlySelected.toLowerCase()
+            }
+        }
+
         rect(
             width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
             0,
@@ -205,6 +221,19 @@ function cardDataDisplay() {
         let buttonText = "select: all"
 
         fill(0, 0, 40)
+        if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
+            mouseY > 0 &&
+            width > mouseX &&
+            cellHeight > mouseY
+        ) {
+            fill(0, 0, 30)
+            print("pressed color pair switcher: all")
+
+            if (mouseJustReleased) {
+                colorPair = "all"
+            }
+        }
+
         rect(
             width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
             0,
@@ -242,8 +271,8 @@ function cardDataDisplay() {
 
         // display winrate
         textAlign(RIGHT, TOP)
-        if (masterJSON[cardName]["stats"][caliberQuery]["all"]) {
-            let gihWR = masterJSON[cardName]["stats"][caliberQuery]["all"]["GIH WR"]
+        if (masterJSON[cardName]["stats"][caliberQuery][colorPair]) {
+            let gihWR = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH WR"]
 
             // get the first three digits and round everything else away
             let formattedWR = round(gihWR * 1000)
