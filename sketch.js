@@ -188,6 +188,11 @@ function cardDataDisplay() {
     let currentlySelected = colorStrip.currentlySelected()
 
     noStroke()
+    fill(0, 0, 80)
+    textAlign(LEFT, TOP)
+    text("queried pair: " + colorPair,
+        width/2, TEXT_BOX_PADDING)
+
     textAlign(RIGHT, TOP)
     if (currentlySelected.length === 2) {
         let buttonText = "select: " + currentlySelected
@@ -199,7 +204,6 @@ function cardDataDisplay() {
             cellHeight > mouseY
         ) {
             fill(0, 0, 30)
-            print("pressed color pair switcher: color pair")
 
             if (mouseJustReleased) {
                 colorPair = currentlySelected.toLowerCase()
@@ -217,7 +221,9 @@ function cardDataDisplay() {
         text(buttonText,
             width - TEXT_BOX_PADDING,
             TEXT_BOX_PADDING)
-    } else if (currentlySelected.length === 0) {
+    }
+
+    else if (currentlySelected.length === 0) {
         let buttonText = "select: all"
 
         fill(0, 0, 40)
@@ -227,7 +233,6 @@ function cardDataDisplay() {
             cellHeight > mouseY
         ) {
             fill(0, 0, 30)
-            print("pressed color pair switcher: all")
 
             if (mouseJustReleased) {
                 colorPair = "all"
@@ -245,7 +250,9 @@ function cardDataDisplay() {
         text(buttonText,
             width - TEXT_BOX_PADDING,
             TEXT_BOX_PADDING)
-    } else {
+    }
+
+    else {
         fill(0, 0, 80)
         text("please select 0 or 2 colors",
             width - TEXT_BOX_PADDING,
