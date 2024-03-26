@@ -144,8 +144,7 @@ function draw() {
 
 // displays the static card data module, which shows previously queried data
 function cardDataDisplay() {
-    // used for displaying card names
-
+    cardQueryShiftY = 0
 
     // check if the data queried should be from top or all players using
     // the caliber variable
@@ -163,6 +162,7 @@ function cardDataDisplay() {
     noStroke()
     fill(0, 0, 50)
 
+    // caliber button
     if (
         mouseX > 0 &&
         mouseY > 0 &&
@@ -182,6 +182,7 @@ function cardDataDisplay() {
     fill(0, 0, 80)
     text(caliberButtonText, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
+    // color strip display
     let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
     colorStrip.render(circleStartPos, cellHeight/2)
 
@@ -259,6 +260,33 @@ function cardDataDisplay() {
             TEXT_BOX_PADDING)
     }
 
+    // reduce font size for the header
+    textSize(12)
+    fill(0, 0, 60)
+
+    // display the header
+    if (cardsToDisplay.length > 0) {
+        cardQueryShiftY += cellHeight
+
+        // name: left-aligned
+        textAlign(LEFT, BOTTOM)
+
+        // there are exactly 2 cells above the cards to display: the caliber
+        // and color buttons, and the header
+        text("name", TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+
+        // GIH WR: right-aligned. although the header legend encompasses 6
+        // characters, the actual winrate is 5 characters, so I have to be
+        // careful about that.
+        textAlign(RIGHT, BOTTOM)
+        text("GIH WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+    }
+
+    textSize(14)
+
+    push()
+    translate(0, cellHeight)
+
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
 
@@ -293,12 +321,13 @@ function cardDataDisplay() {
             text(formattedWR, width - TEXT_BOX_PADDING,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
         } else {
-            text("No data", width - TEXT_BOX_PADDING,
+            text("No GIH", width - TEXT_BOX_PADDING,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
         }
     }
+    pop()
 
-    cardQueryShiftY = cellHeight + cellHeight * cardsToDisplay.length + 10
+    cardQueryShiftY += cellHeight + cellHeight * cardsToDisplay.length + 10
 }
 
 // displays the interactive card querying module, which handles querying each
