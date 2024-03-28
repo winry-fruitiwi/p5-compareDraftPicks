@@ -318,14 +318,19 @@ function cardDataDisplay() {
 // displays the interactive card querying module, which handles querying each
 // card and the "query data" button
 function cardQueryDisplay() {
+    let textBoxWidth = textWidth(" ")*(MAX_QUERY_LENGTH+1)
+
     textAlign(LEFT, TOP)
+
+    textFont(variableWidthFont, 14)
+    let cellHeight = textHeight() + TEXT_BOX_PADDING*2
 
     fill(0, 0, 20)
     noStroke()
     // display a grayish box for the query to go in (assumes monospace font).
     // Also accounts for cursor.
     rect(0, 0,
-        textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
+        textBoxWidth + TEXT_BOX_PADDING*2,
         textHeight() + TEXT_BOX_PADDING*2
     )
 
@@ -350,7 +355,7 @@ function cardQueryDisplay() {
         if (
             0 < mouseX &&
             cellHeight*(i+1) + cardQueryShiftY < mouseY &&
-            mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2 &&
+            mouseX < textBoxWidth + TEXT_BOX_PADDING*2 &&
             mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
         ) {
             fill(0, 0, 30)
@@ -374,7 +379,7 @@ function cardQueryDisplay() {
             if (
                 0 < mouseX &&
                 cellHeight*(i+1) + cardQueryShiftY < mouseY &&
-                mouseX < textWidth(" ")*(MAX_QUERY_LENGTH+1)+TEXT_BOX_PADDING*2 &&
+                mouseX < textBoxWidth+TEXT_BOX_PADDING*2 &&
                 mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
             ) {
                 fill(100, 60, 50)
@@ -385,7 +390,7 @@ function cardQueryDisplay() {
         stroke(0, 0, 0)
         rect(0,
             cellHeight*(i + 1),
-            textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*2,
+            textBoxWidth + TEXT_BOX_PADDING*2,
             textHeight() + TEXT_BOX_PADDING*2
         )
 
@@ -406,7 +411,7 @@ function cardQueryDisplay() {
         // *3 because we want to display this to the right of the text box
         // plus a small margin/padding
         text(cardName,
-            textWidth(" ")*(MAX_QUERY_LENGTH+1) + TEXT_BOX_PADDING*3,
+            textBoxWidth + TEXT_BOX_PADDING*3,
             TEXT_BOX_PADDING + cellHeight*(i))
     }
 
@@ -447,6 +452,8 @@ function cardQueryDisplay() {
             }
         }
     }
+
+    textFont(font, 14)
 
     rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
         textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
