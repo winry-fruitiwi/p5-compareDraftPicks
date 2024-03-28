@@ -260,26 +260,11 @@ function cardDataDisplay() {
             TEXT_BOX_PADDING)
     }
 
-    // reduce font size for the header
-    textSize(12)
-    fill(0, 0, 60)
-
     // display the header
     if (cardsToDisplay.length > 0) {
         cardQueryShiftY += cellHeight
 
-        // name: left-aligned
-        textAlign(LEFT, BOTTOM)
-
-        // there are exactly 2 cells above the cards to display: the caliber
-        // and color buttons, and the header
-        text("name", TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
-
-        // GIH WR: right-aligned. although the header legend encompasses 6
-        // characters, the actual winrate is 5 characters, so I have to be
-        // careful about that.
-        textAlign(RIGHT, BOTTOM)
-        text("GIH WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+        displayHeader()
     }
 
     textSize(14)
@@ -521,6 +506,40 @@ function keyPressed() {
     if (query.length === 0) {
         queriedCardNames = []
     }
+}
+
+
+// displays header for determining where data is displayed in cardDataDisplay
+function displayHeader() {
+    // margin between each element in the header (i.e. the distance between
+    // "grade" and "GIH WR"
+    let elementMargin = 15
+
+    // reduce font size for the header
+    textSize(12)
+    fill(0, 0, 60)
+
+    // name: left-aligned
+    textAlign(LEFT, BOTTOM)
+
+    // there are exactly 2 cells above the cards to display: the caliber
+    // and color buttons, and the header
+    text("name", TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+
+    // GIH WR: right-aligned. although the header legend encompasses 6
+    // characters, the actual winrate is 5 characters, so I have to be
+    // careful about that.
+    textAlign(RIGHT, BOTTOM)
+    text("GIH WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+
+    // GIH grade: displayed as "grade". right-aligned as well?
+    textAlign(RIGHT, BOTTOM)
+    text("grade",
+            (width - TEXT_BOX_PADDING) - elementMargin - textWidth("GIH WR"),
+        cellHeight*2 - TEXT_BOX_PADDING/2
+    )
+
+    // GIH Z-score
 }
 
 
