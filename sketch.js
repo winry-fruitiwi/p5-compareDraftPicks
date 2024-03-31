@@ -76,7 +76,7 @@ const MAX_QUERY_LENGTH = 32
 const REQUIRED_WIDTH = 800
 // margin between each element in the header (i.e. the distance between
 // "grade" and "GIH WR"
-let ELEMENT_MARGIN = 15
+let ELEMENT_MARGIN = 20
 
 
 function preload() {
@@ -292,6 +292,9 @@ function cardDataDisplay() {
         fill(0, 0, 80)
         text(cardName, TEXT_BOX_PADDING, cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
+        // right edge of data display
+        let dataEdge = width - TEXT_BOX_PADDING
+
         // display winrate
         textAlign(RIGHT, TOP)
         if (masterJSON[cardName]["stats"][caliberQuery][colorPair]) {
@@ -307,9 +310,6 @@ function cardDataDisplay() {
             // finally, add the % at the end
             formattedWR += "%"
 
-            // right edge of data display
-            let dataEdge = width - TEXT_BOX_PADDING
-
             text(formattedWR, dataEdge,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
@@ -318,10 +318,25 @@ function cardDataDisplay() {
             text(grade,
                 dataEdge - ELEMENT_MARGIN - textWidth("GIH WR") - textWidth("grade"),
                 cellHeight * (i + 1) + TEXT_BOX_PADDING
-        )
+            )
         } else {
             text("No GIH", width - TEXT_BOX_PADDING,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
+        }
+
+        // greatly simplifies display expressions. currently accounts for
+        // all text from the edge of the screen to the right edge of the
+        // Z-score lines.
+        let currentPos = dataEdge - ELEMENT_MARGIN*2 - textWidth("GIH WR") - textWidth("grade")
+
+        // handles Z-score lines
+        for (let j=3; j >= -3; j--) {
+            stroke(0, 0, 60)
+            line(
+                currentPos - textWidth("1")/2, cellHeight * (i + 1),
+                currentPos - textWidth("1")/2, cellHeight * (i + 2)
+            )
+            currentPos -= ELEMENT_MARGIN
         }
     }
     pop()
@@ -559,16 +574,16 @@ function displayHeader() {
     )
     currentPos -= ELEMENT_MARGIN + textWidth("grade")
 
-    // GIH Z-score
+    // GIH Z-score: centered text
     // should be done with a loop. iterates from 3 to -3
     for (let i=3; i >= -3; i--) {
         text(
             i,
-            currentPos - 20,
+            currentPos - ELEMENT_MARGIN,
             cellHeight*2 - TEXT_BOX_PADDING/2
         )
 
-        currentPos -= 20
+        currentPos -= ELEMENT_MARGIN
     }
 }
 
