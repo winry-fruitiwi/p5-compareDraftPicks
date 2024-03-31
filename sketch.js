@@ -74,6 +74,9 @@ const TEXT_BOX_PADDING = 4
 const MAX_QUERY_LENGTH = 32
 // minimum width required for all elements in the sketch
 const REQUIRED_WIDTH = 800
+// margin between each element in the header (i.e. the distance between
+// "grade" and "GIH WR"
+let ELEMENT_MARGIN = 15
 
 
 function preload() {
@@ -293,6 +296,7 @@ function cardDataDisplay() {
         textAlign(RIGHT, TOP)
         if (masterJSON[cardName]["stats"][caliberQuery][colorPair]) {
             let gihWR = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH WR"]
+            let grade = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH grade"]
 
             // get the first three digits and round everything else away
             let formattedWR = round(gihWR * 1000)
@@ -303,8 +307,18 @@ function cardDataDisplay() {
             // finally, add the % at the end
             formattedWR += "%"
 
-            text(formattedWR, width - TEXT_BOX_PADDING,
+            // right edge of data display
+            let dataEdge = width - TEXT_BOX_PADDING
+
+            text(formattedWR, dataEdge,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
+
+            textAlign(LEFT, TOP)
+
+            text(grade,
+                dataEdge - ELEMENT_MARGIN - textWidth("GIH WR") - textWidth("grade"),
+                cellHeight * (i + 1) + TEXT_BOX_PADDING
+        )
         } else {
             text("No GIH", width - TEXT_BOX_PADDING,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
@@ -518,12 +532,9 @@ function keyPressed() {
 
 // displays header for determining where data is displayed in cardDataDisplay
 function displayHeader() {
-    // margin between each element in the header (i.e. the distance between
-    // "grade" and "GIH WR"
-    let elementMargin = 15
+    // simplifies positions
+    let currentPos = 0
 
-    // reduce font size for the header
-    textSize(12)
     fill(0, 0, 60)
 
     // name: left-aligned
@@ -538,15 +549,27 @@ function displayHeader() {
     // careful about that.
     textAlign(RIGHT, BOTTOM)
     text("GIH WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+    currentPos += width - TEXT_BOX_PADDING - textWidth("GIH WR")
 
     // GIH grade: displayed as "grade". right-aligned as well?
     textAlign(RIGHT, BOTTOM)
     text("grade",
-            (width - TEXT_BOX_PADDING) - elementMargin - textWidth("GIH WR"),
+            (width - TEXT_BOX_PADDING) - ELEMENT_MARGIN - textWidth("GIH WR"),
         cellHeight*2 - TEXT_BOX_PADDING/2
     )
+    currentPos -= ELEMENT_MARGIN + textWidth("grade")
 
     // GIH Z-score
+    // should be done with a loop. iterates from 3 to -3
+    for (let i=3; i >= -3; i--) {
+        text(
+            i,
+            currentPos - 20,
+            cellHeight*2 - TEXT_BOX_PADDING/2
+        )
+
+        currentPos -= 20
+    }
 }
 
 
