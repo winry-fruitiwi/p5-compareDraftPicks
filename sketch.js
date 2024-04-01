@@ -327,17 +327,32 @@ function cardDataDisplay() {
         // greatly simplifies display expressions. currently accounts for
         // all text from the edge of the screen to the right edge of the
         // Z-score lines.
-        let currentPos = dataEdge - ELEMENT_MARGIN*2 - textWidth("GIH WR") - textWidth("grade")
+        let currentPos = dataEdge - ELEMENT_MARGIN*2 - textWidth("GIH WR")
+        currentPos -= textWidth("1")/2 + textWidth("grade")
+
+        // used for finding the 0 tick in the Z-score
+        let zScoreRightEdge = currentPos
+
+        stroke(0, 0, 60)
+        strokeWeight(1)
 
         // handles Z-score lines
         for (let j=3; j >= -3; j--) {
-            stroke(0, 0, 60)
             line(
-                currentPos - textWidth("1")/2, cellHeight * (i + 1),
-                currentPos - textWidth("1")/2, cellHeight * (i + 2)
+                currentPos, cellHeight * (i + 1),
+                currentPos, cellHeight * (i + 2)
             )
             currentPos -= ELEMENT_MARGIN
         }
+
+        let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
+
+        strokeWeight(10)
+        stroke(0, 0, 80)
+        point(
+            (zScoreRightEdge + zScoreLeftEdge)/2,
+            ((cellHeight * (i + 1)) + (cellHeight * (i + 2)))/2
+            )
     }
     pop()
 
