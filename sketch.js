@@ -275,10 +275,18 @@ function cardDataDisplay() {
     push()
     translate(0, cellHeight)
 
+    // calculates the number of times that the loop has gone over cardsToDisplay
+    let iterations = 0
+
     for (let i=0; i < cardsToDisplay.length; i++) {
         textAlign(LEFT, TOP)
 
         let cardName = cardsToDisplay[i]
+
+        // for later
+        // if (!(masterJSON[cardName]["stats"][caliberQuery][colorPair])) {
+        //     continue
+        // }
 
         // display alternating color rectangle
         noStroke()
@@ -300,6 +308,7 @@ function cardDataDisplay() {
         if (masterJSON[cardName]["stats"][caliberQuery][colorPair]) {
             let gihWR = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH WR"]
             let grade = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH grade"]
+            let zScore = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH zscore"]
 
             // get the first three digits and round everything else away
             let formattedWR = round(gihWR * 1000)
@@ -319,44 +328,58 @@ function cardDataDisplay() {
                 dataEdge - ELEMENT_MARGIN - textWidth("GIH WR") - textWidth("grade"),
                 cellHeight * (i + 1) + TEXT_BOX_PADDING
             )
+
+            // greatly simplifies display expressions. currently accounts for
+            // all text from the edge of the screen to the right edge of the
+            // Z-score lines.
+            let currentPos = dataEdge - ELEMENT_MARGIN*2 - textWidth("GIH WR")
+            currentPos -= textWidth("1")/2 + textWidth("grade")
+
+            // used for finding the 0 tick in the Z-score
+            let zScoreRightEdge = currentPos
+
+            stroke(0, 0, 60)
+            strokeWeight(1)
+
+            // handles Z-score lines
+            for (let j=3; j >= -3; j--) {
+                line(
+                    currentPos, cellHeight * (i + 1),
+                    currentPos, cellHeight * (i + 2)
+                )
+                currentPos -= ELEMENT_MARGIN
+            }
+
+            let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
+
+
+
+            // for testing purposes. keep this around
+            // point(
+            //     (zScoreRightEdge + zScoreLeftEdge)/2,
+            //     ((cellHeight * (i + 1)) + (cellHeight * (i + 2)))/2
+            //     )
+
+            // map the Z-score to the specified range
+            strokeWeight(10)
+            stroke(0, 0, 80)
+            let mappedZ = constrain(zScore, -3, 3)
+            mappedZ = map(mappedZ, -3, 3, zScoreLeftEdge, zScoreRightEdge)
+            point(
+                mappedZ,
+                cellHeight * (i + 1) + cellHeight/2
+                )
+
         } else {
             text("No GIH", width - TEXT_BOX_PADDING,
                 cellHeight * (i + 1) + TEXT_BOX_PADDING)
         }
-
-        // greatly simplifies display expressions. currently accounts for
-        // all text from the edge of the screen to the right edge of the
-        // Z-score lines.
-        let currentPos = dataEdge - ELEMENT_MARGIN*2 - textWidth("GIH WR")
-        currentPos -= textWidth("1")/2 + textWidth("grade")
-
-        // used for finding the 0 tick in the Z-score
-        let zScoreRightEdge = currentPos
-
-        stroke(0, 0, 60)
-        strokeWeight(1)
-
-        // handles Z-score lines
-        for (let j=3; j >= -3; j--) {
-            line(
-                currentPos, cellHeight * (i + 1),
-                currentPos, cellHeight * (i + 2)
-            )
-            currentPos -= ELEMENT_MARGIN
-        }
-
-        let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
-
-        strokeWeight(10)
-        stroke(0, 0, 80)
-        point(
-            (zScoreRightEdge + zScoreLeftEdge)/2,
-            ((cellHeight * (i + 1)) + (cellHeight * (i + 2)))/2
-            )
     }
     pop()
 
     cardQueryShiftY += cellHeight + cellHeight * cardsToDisplay.length + 10
+
+    print("\n")
 }
 
 // displays the interactive card querying module, which handles querying each
