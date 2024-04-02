@@ -291,7 +291,7 @@ function cardDataDisplay() {
         // display alternating color rectangle
         noStroke()
         // this essentially alternates alpha between 0 and 20
-        fill(0, 0, 100, (i + 1) % 2 * 5)
+        fill(0, 0, 100, (i + 1) % 2 * 5 + 5)
         rect(0, cellHeight * (i + 1),
             width, cellHeight
             )
@@ -361,10 +361,21 @@ function cardDataDisplay() {
             //     )
 
             // map the Z-score to the specified range
-            strokeWeight(10)
-            stroke(0, 0, 80)
             let mappedZ = constrain(zScore, -3, 3)
             mappedZ = map(mappedZ, -3, 3, zScoreLeftEdge, zScoreRightEdge)
+
+            // display a line to the z-score, then a point at the score
+            strokeWeight(2)
+            stroke(0, 0, 60)
+            line(
+                (zScoreRightEdge + zScoreLeftEdge)/2,
+                cellHeight*(i+1) + cellHeight/2,
+                mappedZ,
+                cellHeight*(i+1) + cellHeight/2
+            )
+
+            strokeWeight(5)
+            stroke(0, 0, 80)
             point(
                 mappedZ,
                 cellHeight * (i + 1) + cellHeight/2
