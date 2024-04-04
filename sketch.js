@@ -311,6 +311,7 @@ function cardDataDisplay() {
         let zScore = winrates[2]
 
         // display card name
+        noStroke()
         fill(0, 0, 80)
         text(cardName, TEXT_BOX_PADDING, cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
@@ -332,6 +333,7 @@ function cardDataDisplay() {
         formattedWR += "%"
 
         noStroke()
+        fill(0, 0, 80)
         textAlign(RIGHT, TOP)
         text(formattedWR, dataEdge,
             cellHeight * (i + 1) + TEXT_BOX_PADDING)
