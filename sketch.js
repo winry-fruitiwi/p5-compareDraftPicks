@@ -276,7 +276,7 @@ function cardDataDisplay() {
     translate(0, cellHeight)
 
     // dictionary of card data: {cardName: ["gihWR", "gihGrade", "gihZ"]
-    let cardData = {}
+    let unsortedCardData = {}
 
     // right edge of data display
     let dataEdge = width - TEXT_BOX_PADDING
@@ -297,14 +297,21 @@ function cardDataDisplay() {
             let grade = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH grade"]
             let zScore = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH zscore"]
 
-            cardData[cardName] = [winrate, grade, zScore]
+            unsortedCardData[cardName] = [winrate, grade, zScore]
         }
     }
 
-    for (let i=0; i<Object.keys(cardData).length; i++) {
+    let cardData = Object.entries(unsortedCardData);
+
+    // b[1][1] is the z-score of card B, a[1][1] is the z-score of card A
+    cardData.sort((a, b) => {
+        return b[1][2] - a[1][2]
+    });
+
+    for (let i=0; i<cardData.length; i++) {
         // structure of winrates: cardData[cardName] = [winrate, grade, zScore]
-        let cardName = Object.keys(cardData)[i]
-        let winrates = cardData[cardName]
+        let cardName = cardData[i][0]
+        let winrates = cardData[i][1]
 
         let winrate = winrates[0]
         let grade = winrates[1]
