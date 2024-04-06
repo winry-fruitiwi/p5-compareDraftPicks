@@ -263,6 +263,12 @@ function cardDataDisplay() {
             TEXT_BOX_PADDING)
     }
 
+    push()
+    translate(0, cellHeight)
+
+    textAlign(LEFT, TOP)
+    text("GIH", TEXT_BOX_PADDING, TEXT_BOX_PADDING)
+
     // display the header
     if (cardsToDisplay.length > 0) {
         cardQueryShiftY += cellHeight
@@ -272,7 +278,6 @@ function cardDataDisplay() {
 
     textSize(14)
 
-    push()
     translate(0, cellHeight)
 
     // dictionary of card data: {cardName: ["gihWR", "gihGrade", "gihZ"]
@@ -407,7 +412,7 @@ function cardDataDisplay() {
 
     pop()
 
-    cardQueryShiftY += cellHeight + cellHeight * cardsToDisplay.length + 10
+    cardQueryShiftY += cellHeight*2 + cellHeight * cardData.length + 10
 }
 
 // displays the interactive card querying module, which handles querying each
