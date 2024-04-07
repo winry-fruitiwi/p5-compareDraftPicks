@@ -566,6 +566,25 @@ function cardQueryDisplay() {
 }
 
 
+// displays a button. when clicked on, this function will use a callback
+// function, which changes based on the button. May be incompatible with
+// buttons that require local variables to function.
+// x1 and y1 are the corner coordinates, w and h are the width and height.
+// onClick is the previously described callback function.
+function renderButton(x1, y1, w, h, onClick) {
+    // display a rect at the coordinates with width and height w and h.
+
+    // handle hovering check. call the callback function
+}
+
+
+// displays text, but padded with a custom amount of padding. Default is
+// TEXT_BOX_PADDING.
+function paddedText(padding=TEXT_BOX_PADDING) {
+
+}
+
+
 function keyPressed() {
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
