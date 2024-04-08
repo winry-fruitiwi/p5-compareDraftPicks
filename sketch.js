@@ -121,7 +121,6 @@ function draw() {
     rectMode(CORNER)
     background(0, 0, 9)
 
-    // does nothing currently
     cardDataDisplay()
 
     // no translation right now, but I need to do this so that
@@ -183,7 +182,7 @@ function cardDataDisplay() {
 
     textAlign(LEFT, TOP)
     fill(0, 0, 80)
-    text(caliberButtonText, TEXT_BOX_PADDING, TEXT_BOX_PADDING)
+    paddedText(caliberButtonText, 0, 0)
 
     // color strip display
     let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
@@ -571,8 +570,10 @@ function cardQueryDisplay() {
 // buttons that require local variables to function.
 // x1 and y1 are the corner coordinates, w and h are the width and height.
 // onClick is the previously described callback function.
-function renderButton(x1, y1, w, h, onClick) {
+function renderButton(text, x1, y1, w, h, onClick) {
     // display a rect at the coordinates with width and height w and h.
+    rect(x1, y1, w, h)
+    paddedText(text, x1, y1)
 
     // handle hovering check. call the callback function
 }
@@ -580,8 +581,8 @@ function renderButton(x1, y1, w, h, onClick) {
 
 // displays text, but padded with a custom amount of padding. Default is
 // TEXT_BOX_PADDING.
-function paddedText(padding=TEXT_BOX_PADDING) {
-
+function paddedText(t, x, y, padding=TEXT_BOX_PADDING) {
+    text(t, x + padding, y + padding)
 }
 
 
