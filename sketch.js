@@ -524,44 +524,63 @@ function cardQueryDisplay() {
     fill(0, 0, 40)
     // coordinates for the rect. This is just to make the hover check simpler.
     let topLeftQueryPos = new p5.Vector(
-        width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0
+        width - textWidth("Query Data") - TEXT_BOX_PADDING * 2, 0
     )
 
     let bottomRightQueryPos = new p5.Vector(
         width, textAscent() + textDescent() + TEXT_BOX_PADDING * 2
     )
 
-    if (
-        topLeftQueryPos.x < mouseX &&
-        topLeftQueryPos.y + cardQueryShiftY < mouseY &&
-        mouseX < bottomRightQueryPos.x &&
-        mouseY < bottomRightQueryPos.y + cardQueryShiftY
-    ) {
-        fill(0, 0, 30)
-
-        if (mouseJustReleased) {
-            cardsToDisplay = selectedCards.slice()
-
-            for (let i = 0; i < selectedCards.length; i++) {
-                let cardName = selectedCards[i]
-
-                console.log(`${cardName}: ` +
-                    JSON.stringify(masterJSON[cardName], null, 2)
-                )
-            }
-        }
-    }
+    // if (
+    //     topLeftQueryPos.x < mouseX &&
+    //     topLeftQueryPos.y + cardQueryShiftY < mouseY &&
+    //     mouseX < bottomRightQueryPos.x &&
+    //     mouseY < bottomRightQueryPos.y + cardQueryShiftY
+    // ) {
+    //     fill(0, 0, 30)
+    //
+    //     if (mouseJustReleased) {
+    //         cardsToDisplay = selectedCards.slice()
+    //
+    //         for (let i = 0; i < selectedCards.length; i++) {
+    //             let cardName = selectedCards[i]
+    //
+    //             console.log(`${cardName}: ` +
+    //                 JSON.stringify(masterJSON[cardName], null, 2)
+    //             )
+    //         }
+    //     }
+    // }
+    //
+    //
+    // rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
+    //     textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
+    //     textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
+    //
+    //
+    // textAlign(RIGHT, TOP)
+    // fill(0, 0, 80)
+    // text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
     textFont(font, 14)
+    textAlign(LEFT, TOP)
+    renderButton("Query Data",
+        width - textWidth("Query Data") - TEXT_BOX_PADDING * 2, 0,
+        textWidth("Query Data") + TEXT_BOX_PADDING * 2,
+        textHeight() + TEXT_BOX_PADDING * 2,
+        hoverQueryData,
+        clickQueryData,
+        color(0, 0, 80),
+        color(0, 0, 40)
+    )
+}
 
-    rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
-        textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
-        textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
+function hoverQueryData() {
+    fill(0, 0, 30)
+}
 
+function clickQueryData() {
 
-    textAlign(RIGHT, TOP)
-    fill(0, 0, 80)
-    text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 }
 
 
@@ -570,12 +589,32 @@ function cardQueryDisplay() {
 // buttons that require local variables to function.
 // x1 and y1 are the corner coordinates, w and h are the width and height.
 // onClick is the previously described callback function.
-function renderButton(text, x1, y1, w, h, onClick) {
+// onHover is used to add hover effects while still being effective
+// tFill is the standard text fill
+// rFill is the default fill for the rectangle, but is influenced by both
+// onHover and onClick
+function renderButton(text, x1, y1, w, h, onHover, onClick, tFill, rFill) {
+    noStroke()
+    fill(rFill)
+    // handle hovering check. call the callback function
+    if (
+        x1 < mouseX &&
+        y1 + cardQueryShiftY < mouseY &&
+        mouseX < x1 + w &&
+        mouseY < y1 + h + cardQueryShiftY
+    ) {
+        onHover()
+
+        if (mouseJustReleased) {
+            onClick()
+        }
+    }
     // display a rect at the coordinates with width and height w and h.
     rect(x1, y1, w, h)
-    paddedText(text, x1, y1)
 
-    // handle hovering check. call the callback function
+    noStroke()
+    fill(tFill)
+    paddedText(text, x1, y1)
 }
 
 
