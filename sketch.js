@@ -521,46 +521,6 @@ function cardQueryDisplay() {
 
     // adds the "Query Data" button at the top.
     // note that "Query Data (WIP)" is displayed if I'm still working on it.
-    fill(0, 0, 40)
-    // coordinates for the rect. This is just to make the hover check simpler.
-    let topLeftQueryPos = new p5.Vector(
-        width - textWidth("Query Data") - TEXT_BOX_PADDING * 2, 0
-    )
-
-    let bottomRightQueryPos = new p5.Vector(
-        width, textAscent() + textDescent() + TEXT_BOX_PADDING * 2
-    )
-
-    // if (
-    //     topLeftQueryPos.x < mouseX &&
-    //     topLeftQueryPos.y + cardQueryShiftY < mouseY &&
-    //     mouseX < bottomRightQueryPos.x &&
-    //     mouseY < bottomRightQueryPos.y + cardQueryShiftY
-    // ) {
-    //     fill(0, 0, 30)
-    //
-    //     if (mouseJustReleased) {
-    //         cardsToDisplay = selectedCards.slice()
-    //
-    //         for (let i = 0; i < selectedCards.length; i++) {
-    //             let cardName = selectedCards[i]
-    //
-    //             console.log(`${cardName}: ` +
-    //                 JSON.stringify(masterJSON[cardName], null, 2)
-    //             )
-    //         }
-    //     }
-    // }
-    //
-    //
-    // rect(width - textWidth("Query Data (WIP)") - TEXT_BOX_PADDING * 2, 0,
-    //     textWidth("Query Data (WIP)") + TEXT_BOX_PADDING * 2,
-    //     textAscent() + textDescent() + TEXT_BOX_PADDING * 2)
-    //
-    //
-    // textAlign(RIGHT, TOP)
-    // fill(0, 0, 80)
-    // text("Query Data (WIP)", width - TEXT_BOX_PADDING, TEXT_BOX_PADDING)
 
     textFont(font, 14)
     textAlign(LEFT, TOP)
@@ -570,8 +530,8 @@ function cardQueryDisplay() {
         textHeight() + TEXT_BOX_PADDING * 2,
         hoverQueryData,
         clickQueryData,
-        color(0, 0, 80),
-        color(0, 0, 40)
+        color(0, 0, 40),
+        color(0, 0, 80)
     )
 }
 
@@ -580,7 +540,15 @@ function hoverQueryData() {
 }
 
 function clickQueryData() {
+    cardsToDisplay = selectedCards.slice()
 
+    for (let i = 0; i < selectedCards.length; i++) {
+        let cardName = selectedCards[i]
+
+        console.log(`${cardName}: ` +
+            JSON.stringify(masterJSON[cardName], null, 2)
+        )
+    }
 }
 
 
@@ -589,11 +557,11 @@ function clickQueryData() {
 // buttons that require local variables to function.
 // x1 and y1 are the corner coordinates, w and h are the width and height.
 // onClick is the previously described callback function.
-// onHover is used to add hover effects while still being effective
-// tFill is the standard text fill
+// onHover is used to add hover effects while still allowing onClick to work
 // rFill is the default fill for the rectangle, but is influenced by both
 // onHover and onClick
-function renderButton(text, x1, y1, w, h, onHover, onClick, tFill, rFill) {
+// tFill is the standard text fill
+function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
     noStroke()
     fill(rFill)
     // handle hovering check. call the callback function
