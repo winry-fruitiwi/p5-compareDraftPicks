@@ -161,28 +161,40 @@ function cardDataDisplay() {
 
     let caliberButtonText = `Toggle Caliber: ${caliberText}`
 
-    noStroke()
-    fill(0, 0, 50)
-
-    // caliber button
-    if (
-        mouseX > 0 &&
-        mouseY > 0 &&
-        textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING > mouseX &&
-        cellHeight > mouseY
-    ) {
-        fill(0, 0, 40)
-
-        if (mouseJustReleased) {
-            caliber = !caliber
-        }
-    }
-
-    rect(0, 0, textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING, cellHeight)
+    // noStroke()
+    // fill(0, 0, 50)
+    //
+    // // caliber button
+    // if (
+    //     mouseX > 0 &&
+    //     mouseY > 0 &&
+    //     textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING > mouseX &&
+    //     cellHeight > mouseY
+    // ) {
+    //     fill(0, 0, 40)
+    //
+    //     if (mouseJustReleased) {
+    //         caliber = !caliber
+    //     }
+    // }
+    //
+    // rect(0, 0, textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING, cellHeight)
+    //
+    // fill(0, 0, 80)
+    // paddedText(caliberButtonText, 0, 0)
 
     textAlign(LEFT, TOP)
-    fill(0, 0, 80)
-    paddedText(caliberButtonText, 0, 0)
+    renderButton(
+        caliberButtonText,
+        0,
+        0,
+        textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING,
+        cellHeight,
+        () => {fill(0, 0, 40)}, // hover callback function
+        () => {caliber = !caliber}, // click callback function
+        color(0, 0, 50),
+        color(0, 0, 80)
+    )
 
     // color strip display
     let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
@@ -535,10 +547,12 @@ function cardQueryDisplay() {
     )
 }
 
+// onHover callback function for Query Data button
 function hoverQueryData() {
     fill(0, 0, 30)
 }
 
+// onClick callback function for Query Data button
 function clickQueryData() {
     cardsToDisplay = selectedCards.slice()
 
