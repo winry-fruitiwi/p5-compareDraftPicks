@@ -161,28 +161,6 @@ function cardDataDisplay() {
 
     let caliberButtonText = `Toggle Caliber: ${caliberText}`
 
-    // noStroke()
-    // fill(0, 0, 50)
-    //
-    // // caliber button
-    // if (
-    //     mouseX > 0 &&
-    //     mouseY > 0 &&
-    //     textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING > mouseX &&
-    //     cellHeight > mouseY
-    // ) {
-    //     fill(0, 0, 40)
-    //
-    //     if (mouseJustReleased) {
-    //         caliber = !caliber
-    //     }
-    // }
-    //
-    // rect(0, 0, textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING, cellHeight)
-    //
-    // fill(0, 0, 80)
-    // paddedText(caliberButtonText, 0, 0)
-
     textAlign(LEFT, TOP)
     renderButton(
         caliberButtonText,
@@ -192,7 +170,7 @@ function cardDataDisplay() {
         cellHeight,
         () => {fill(0, 0, 40)}, // hover callback function
         () => {caliber = !caliber}, // click callback function
-        color(0, 0, 50),
+        color(0, 0, 40),
         color(0, 0, 80)
     )
 
@@ -208,66 +186,92 @@ function cardDataDisplay() {
     text("queried pair: " + colorPair,
         width/2, TEXT_BOX_PADDING)
 
-    textAlign(RIGHT, TOP)
     if (currentlySelected.length === 2) {
         let buttonText = "select: " + currentlySelected
 
-        fill(0, 0, 40)
-        if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
-            mouseY > 0 &&
-            width > mouseX &&
-            cellHeight > mouseY
-        ) {
-            fill(0, 0, 30)
+        // fill(0, 0, 40)
+        // if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
+        //     mouseY > 0 &&
+        //     width > mouseX &&
+        //     cellHeight > mouseY
+        // ) {
+        //     fill(0, 0, 30)
+        //
+        //     if (mouseJustReleased) {
+        //         colorPair = currentlySelected.toLowerCase()
+        //     }
+        // }
+        //
+        // rect(
+        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
+        //     0,
+        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),
+        //     cellHeight
+        // )
+        //
+        // fill(0, 0, 80)
+        // text(buttonText,
+        //     width - TEXT_BOX_PADDING,
+        //     TEXT_BOX_PADDING)
 
-            if (mouseJustReleased) {
-                colorPair = currentlySelected.toLowerCase()
-            }
-        }
-
-        rect(
-            width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
-            0,
-            TEXT_BOX_PADDING * 2 + textWidth(buttonText),
-            cellHeight
+        textAlign(LEFT, TOP)
+        renderButton(
+            buttonText,                                         //text
+            width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
+            0,                                                  // y
+            TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
+            cellHeight,                                         // h
+            () => {fill(0, 0, 30)},                             // onHover
+            () => {colorPair = currentlySelected.toLowerCase()},// onClick
+            color(0, 0, 40),                                    // rectFill
+            color(0, 0, 80)                                     // textFill
         )
-
-        fill(0, 0, 80)
-        text(buttonText,
-            width - TEXT_BOX_PADDING,
-            TEXT_BOX_PADDING)
     }
 
     else if (currentlySelected.length === 0) {
         let buttonText = "select: all"
 
-        fill(0, 0, 40)
-        if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
-            mouseY > 0 &&
-            width > mouseX &&
-            cellHeight > mouseY
-        ) {
-            fill(0, 0, 30)
+        // fill(0, 0, 40)
+        // if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
+        //     mouseY > 0 &&
+        //     width > mouseX &&
+        //     cellHeight > mouseY
+        // ) {
+        //     fill(0, 0, 30)
+        //
+        //     if (mouseJustReleased) {
+        //         colorPair = "all"
+        //     }
+        // }
+        //
+        // rect(
+        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
+        //     0,
+        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),
+        //     cellHeight
+        // )
+        //
+        // fill(0, 0, 80)
+        // text(buttonText,
+        //     width - TEXT_BOX_PADDING,
+        //     TEXT_BOX_PADDING)
 
-            if (mouseJustReleased) {
-                colorPair = "all"
-            }
-        }
-
-        rect(
-            width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
-            0,
-            TEXT_BOX_PADDING * 2 + textWidth(buttonText),
-            cellHeight
+        textAlign(LEFT, TOP)
+        renderButton(
+            buttonText,                                         //text
+            width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
+            0,                                                  // y
+            TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
+            cellHeight,                                         // h
+            () => {fill(0, 0, 30)},                             // onHover
+            () => {colorPair = "all"},// onClick
+            color(0, 0, 40),                                    // rectFill
+            color(0, 0, 80)                                     // textFill
         )
-
-        fill(0, 0, 80)
-        text(buttonText,
-            width - TEXT_BOX_PADDING,
-            TEXT_BOX_PADDING)
     }
 
     else {
+        textAlign(RIGHT, TOP)
         fill(0, 0, 80)
         text("please select 0 or 2 colors",
             width - TEXT_BOX_PADDING,
