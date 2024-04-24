@@ -60,6 +60,9 @@ let mouseJustReleased = false
 // the caliber of data I'm querying: top vs all players. false = all, true = top
 let caliber = false
 
+// the type of data I'm querying: GIH, OH, or GD
+let queriedWR = "GIH"
+
 // color pair of data I'm querying
 let colorPair = "all"
 
@@ -189,31 +192,6 @@ function cardDataDisplay() {
     if (currentlySelected.length === 2) {
         let buttonText = "select: " + currentlySelected
 
-        // fill(0, 0, 40)
-        // if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
-        //     mouseY > 0 &&
-        //     width > mouseX &&
-        //     cellHeight > mouseY
-        // ) {
-        //     fill(0, 0, 30)
-        //
-        //     if (mouseJustReleased) {
-        //         colorPair = currentlySelected.toLowerCase()
-        //     }
-        // }
-        //
-        // rect(
-        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
-        //     0,
-        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),
-        //     cellHeight
-        // )
-        //
-        // fill(0, 0, 80)
-        // text(buttonText,
-        //     width - TEXT_BOX_PADDING,
-        //     TEXT_BOX_PADDING)
-
         textAlign(LEFT, TOP)
         renderButton(
             buttonText,                                         //text
@@ -230,31 +208,6 @@ function cardDataDisplay() {
 
     else if (currentlySelected.length === 0) {
         let buttonText = "select: all"
-
-        // fill(0, 0, 40)
-        // if (mouseX > width - TEXT_BOX_PADDING*2 - textWidth(buttonText) &&
-        //     mouseY > 0 &&
-        //     width > mouseX &&
-        //     cellHeight > mouseY
-        // ) {
-        //     fill(0, 0, 30)
-        //
-        //     if (mouseJustReleased) {
-        //         colorPair = "all"
-        //     }
-        // }
-        //
-        // rect(
-        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText),
-        //     0,
-        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),
-        //     cellHeight
-        // )
-        //
-        // fill(0, 0, 80)
-        // text(buttonText,
-        //     width - TEXT_BOX_PADDING,
-        //     TEXT_BOX_PADDING)
 
         textAlign(LEFT, TOP)
         renderButton(
@@ -279,13 +232,24 @@ function cardDataDisplay() {
     }
 
     push()
-    translate(0, cellHeight)
 
+    // button that changes which winrate type the element is sorted by
     textAlign(LEFT, TOP)
-    text("GIH", TEXT_BOX_PADDING, TEXT_BOX_PADDING)
+    renderButton(
+        "OH",
+        0,
+        TEXT_BOX_PADDING + cellHeight,
+        textWidth("OH") + TEXT_BOX_PADDING * 2,
+        textHeight() + TEXT_BOX_PADDING * 2,
+        () => {fill(0, 0, 30)},
+        () => {queriedWR = "OH"},
+        color(0, 0, 40),
+        color(0, 0, 80)
+    )
 
     // display the header
     if (cardsToDisplay.length > 0) {
+        translate(0, cellHeight)
         cardQueryShiftY += cellHeight
 
         displayHeader()
@@ -306,16 +270,12 @@ function cardDataDisplay() {
 
         let cardName = cardsToDisplay[i]
 
-        // for later
-        // if (!(masterJSON[cardName]["stats"][caliberQuery][colorPair])) {
-        //     continue
-        // }
-
 
         if (masterJSON[cardName]["stats"][caliberQuery][colorPair]) {
-            let winrate = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH WR"]
-            let grade = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH grade"]
-            let zScore = masterJSON[cardName]["stats"][caliberQuery][colorPair]["GIH zscore"]
+            let data = masterJSON[cardName]["stats"][caliberQuery][colorPair]
+            let winrate = data[`${queriedWR} WR`]
+            let grade = data[`${queriedWR} grade`]
+            let zScore = data[`${queriedWR} zscore`]
 
             unsortedCardData[cardName] = [winrate, grade, zScore]
         }
@@ -679,7 +639,7 @@ function displayHeader() {
     // characters, the actual winrate is 5 characters, so I have to be
     // careful about that.
     textAlign(RIGHT, BOTTOM)
-    text("GIH WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+    text(queriedWR + " WR", width - TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
     currentPos += width - TEXT_BOX_PADDING - textWidth("GIH WR")
 
     // GIH grade: displayed as "grade". right-aligned as well?
