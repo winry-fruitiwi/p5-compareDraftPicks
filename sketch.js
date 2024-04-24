@@ -247,6 +247,30 @@ function cardDataDisplay() {
         color(0, 0, 80)
     )
 
+    renderButton(
+        "GIH",
+        textWidth("OH") + TEXT_BOX_PADDING * 3,
+        TEXT_BOX_PADDING + cellHeight,
+        textWidth("GIH") + TEXT_BOX_PADDING * 2,
+        textHeight() + TEXT_BOX_PADDING * 2,
+        () => {fill(0, 0, 30)},
+        () => {queriedWR = "GIH"},
+        color(0, 0, 40),
+        color(0, 0, 80)
+    )
+
+    renderButton(
+        "GD",
+        textWidth("OH") + TEXT_BOX_PADDING * 3 + textWidth("GIH") + TEXT_BOX_PADDING * 3,
+        TEXT_BOX_PADDING + cellHeight,
+        textWidth("GD") + TEXT_BOX_PADDING * 2,
+        textHeight() + TEXT_BOX_PADDING * 2,
+        () => {fill(0, 0, 30)},
+        () => {queriedWR = "GD"},
+        color(0, 0, 40),
+        color(0, 0, 80)
+    )
+
     // display the header
     if (cardsToDisplay.length > 0) {
         translate(0, cellHeight)
