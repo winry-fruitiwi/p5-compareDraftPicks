@@ -234,6 +234,22 @@ function cardDataDisplay() {
     push()
 
     // button that changes which winrate type the element is sorted by
+    let ohFill = color(0, 0, 40)
+    let gihFill = color(0, 0, 40)
+    let gdFill = color(0, 0, 40)
+
+    if (queriedWR === "OH") {
+        ohFill = color(0, 0, 35)
+    }
+
+    if (queriedWR === "GIH") {
+        gihFill = color(0, 0, 35)
+    }
+
+    if (queriedWR === "GD") {
+        gdFill = color(0, 0, 35)
+    }
+
     textAlign(LEFT, TOP)
     renderButton(
         "OH",
@@ -243,7 +259,7 @@ function cardDataDisplay() {
         textHeight() + TEXT_BOX_PADDING * 2,
         () => {fill(0, 0, 30)},
         () => {queriedWR = "OH"},
-        color(0, 0, 40),
+        ohFill,
         color(0, 0, 80)
     )
 
@@ -255,7 +271,7 @@ function cardDataDisplay() {
         textHeight() + TEXT_BOX_PADDING * 2,
         () => {fill(0, 0, 30)},
         () => {queriedWR = "GIH"},
-        color(0, 0, 40),
+        gihFill,
         color(0, 0, 80)
     )
 
@@ -267,7 +283,7 @@ function cardDataDisplay() {
         textHeight() + TEXT_BOX_PADDING * 2,
         () => {fill(0, 0, 30)},
         () => {queriedWR = "GD"},
-        color(0, 0, 40),
+        gdFill,
         color(0, 0, 80)
     )
 
