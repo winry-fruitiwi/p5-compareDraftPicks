@@ -328,6 +328,10 @@ function cardDataDisplay() {
         return b[1][2] - a[1][2]
     });
 
+    let grades = [
+        'S ', 'A+', 'A ', 'A-', 'B+', 'B ', 'B-', 'C+', 'C ', 'C-', 'D+', 'D ', 'D-', 'F '
+    ]
+
     for (let i=0; i<cardData.length; i++) {
         // structure of winrates: cardData[cardName] = [winrate, grade, zScore]
         let cardName = cardData[i][0]
@@ -367,6 +371,9 @@ function cardDataDisplay() {
 
         textAlign(LEFT, TOP)
 
+        fill(137 - 11*grades.indexOf(grade), 82, 77)
+        stroke(137 - 11*grades.indexOf(grade), 82, 77)
+        strokeWeight(0.5)
         text(grade,
             dataEdge - ELEMENT_MARGIN - textWidth("GIH WR") - textWidth("grade"),
             cellHeight * (i + 1) + TEXT_BOX_PADDING
