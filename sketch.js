@@ -402,8 +402,6 @@ function cardDataDisplay() {
 
         let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
 
-
-
         // for testing purposes. keep this around
         // point(
         //     (zScoreRightEdge + zScoreLeftEdge)/2,
@@ -708,6 +706,11 @@ function displayHeader() {
 
         currentPos -= ELEMENT_MARGIN
     }
+
+    textAlign(RIGHT, BOTTOM)
+
+    // ALSA: displayed as "alsa". right-aligned
+    text("ALSA", currentPos - ELEMENT_MARGIN * 2, cellHeight*2 - TEXT_BOX_PADDING/2)
 }
 
 
