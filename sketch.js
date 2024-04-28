@@ -299,7 +299,7 @@ function cardDataDisplay() {
 
     translate(0, cellHeight)
 
-    // dictionary of card data: {cardName: ["gihWR", "gihGrade", "gihZ"]
+    // dictionary of card data: {cardName: ["gihWR", "gihGrade", "gihZ", "alsa"]
     let unsortedCardData = {}
 
     // right edge of data display
@@ -316,8 +316,9 @@ function cardDataDisplay() {
             let winrate = data[`${queriedWR} WR`]
             let grade = data[`${queriedWR} grade`]
             let zScore = data[`${queriedWR} zscore`]
+            let alsa = data[`ALSA`]
 
-            unsortedCardData[cardName] = [winrate, grade, zScore]
+            unsortedCardData[cardName] = [winrate, grade, zScore, alsa]
         }
     }
 
@@ -340,7 +341,9 @@ function cardDataDisplay() {
         let winrate = winrates[0]
         let grade = winrates[1]
         let zScore = winrates[2]
+        let rawALSA = winrates[3]
 
+        textAlign(LEFT, TOP)
         // display card name
         noStroke()
         fill(0, 0, 80)
@@ -362,6 +365,12 @@ function cardDataDisplay() {
         formattedWR = formattedWR.slice(0, 2) + "." + formattedWR.slice(2)
         // finally, add the % at the end
         formattedWR += "%"
+
+        // do the same for ALSA but without the % at the end
+        // get the first three digits and round everything else away
+        let ALSA = round(rawALSA * 100)
+        ALSA = str(ALSA)
+        ALSA = ALSA.slice(0, 1) + "." + ALSA.slice(1)
 
         noStroke()
         fill(0, 0, 80)
@@ -399,6 +408,12 @@ function cardDataDisplay() {
             )
             currentPos -= ELEMENT_MARGIN
         }
+
+        textAlign(LEFT, TOP)
+        noStroke()
+        fill(0, 0, 80)
+        text(ALSA, currentPos - ELEMENT_MARGIN * 2 - textWidth(" "),
+            cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
         let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
 
