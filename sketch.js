@@ -317,8 +317,9 @@ function cardDataDisplay() {
             let grade = data[`${queriedWR} grade`]
             let zScore = data[`${queriedWR} zscore`]
             let alsa = data[`ALSA`]
+            let numPlayed = data[`# GIH`]
 
-            unsortedCardData[cardName] = [winrate, grade, zScore, alsa]
+            unsortedCardData[cardName] = [winrate, grade, zScore, alsa, numPlayed]
         }
     }
 
@@ -342,12 +343,22 @@ function cardDataDisplay() {
         let grade = winrates[1]
         let zScore = winrates[2]
         let rawALSA = winrates[3]
+        let numPlayed = winrates[4]
 
         textAlign(LEFT, TOP)
         // display card name
         noStroke()
         fill(0, 0, 80)
-        text(cardName, TEXT_BOX_PADDING, cellHeight * (i + 1) + TEXT_BOX_PADDING)
+        paddedText(cardName, 0, cellHeight * (i + 1))
+
+        textAlign(LEFT, TOP)
+        // you have to give Jem Lightfoote, Sky Explorer some respect for
+        // its long card name.
+        paddedText(
+            numPlayed,
+            textWidth(" ")*32 + 3*TEXT_BOX_PADDING,
+            cellHeight * (i + 1)
+        )
 
         // display alternating color rectangle
         noStroke()
@@ -694,6 +705,13 @@ function displayHeader() {
     // there are exactly 2 cells above the cards to display: the caliber
     // and color buttons, and the header
     text("name", TEXT_BOX_PADDING, cellHeight*2 - TEXT_BOX_PADDING/2)
+
+    textAlign(LEFT, BOTTOM)
+    text(
+        "# played",
+        textWidth(" ")*32 + 4*TEXT_BOX_PADDING,
+        cellHeight*2 - TEXT_BOX_PADDING/2,
+    )
 
     // GIH WR: right-aligned. although the header legend encompasses 6
     // characters, the actual winrate is 5 characters, so I have to be
