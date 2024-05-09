@@ -70,6 +70,12 @@ let colorStrip
 
 let cellHeight
 
+// used in selecting items using arrow keys rather than mouse
+let selectedIndex = 0
+
+// on I just released enter. used for selecting items using arrow keys
+let enterJustPressed = false
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -141,9 +147,10 @@ function draw() {
     // debugCorner.showBottom()
 
     mouseJustReleased = false
+    enterJustPressed = false
 
-    if (frameCount > 3000)
-        noLoop()
+    // if (frameCount > 3000)
+    //     noLoop()
 }
 
 
@@ -498,17 +505,18 @@ function cardQueryDisplay() {
         fill(0, 0, 40)
 
         // check if I'm hovering over this card name
-        if (
+        if ((
             0 < mouseX &&
             cellHeight*(i+1) + cardQueryShiftY < mouseY &&
             mouseX < textBoxWidth + TEXT_BOX_PADDING*2 &&
             mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
+            ) || i === selectedIndex
         ) {
             fill(0, 0, 30)
 
             // if I also just clicked on this card, either add it to or remove
             // it from the list of cards selected
-            if (mouseJustReleased) {
+            if (mouseJustReleased || enterJustPressed) {
 
                 if (!selectedCards.includes(cardName))
                     selectedCards.push(cardName)
@@ -577,6 +585,18 @@ function cardQueryDisplay() {
         textHeight() + TEXT_BOX_PADDING * 2,
         hoverQueryData,
         clickQueryData,
+        color(0, 0, 40),
+        color(0, 0, 80)
+    )
+
+    textAlign(LEFT, TOP)
+    renderButton("Clear Query",
+        width-textWidth("Query Data")-textWidth("Clear Query")-TEXT_BOX_PADDING*5,
+        0,
+        textWidth("Clear Query") + TEXT_BOX_PADDING * 2,
+        textHeight() + TEXT_BOX_PADDING * 2,
+        () => {fill(0, 0, 30)},
+        () => {selectedCards = []; cardsToDisplay = []; query = ""},
         color(0, 0, 40),
         color(0, 0, 80)
     )
@@ -661,9 +681,18 @@ function keyPressed() {
     // character cap, don't add the character.
     if (key !== "`" && key.length === 1 && query.length < MAX_QUERY_LENGTH) {
         query += key
-    } else if (keyCode === BACKSPACE)
+        selectedIndex = 0
+    } else if (keyCode === BACKSPACE){
         // delete the last element of query
         query = query.slice(0, -1)
+        selectedIndex = 0
+    }
+    else if (keyCode === ENTER)
+        enterJustPressed = true
+    else if (keyCode === UP_ARROW)
+        selectedIndex -= 1
+    else if (keyCode === DOWN_ARROW)
+        selectedIndex += 1
 
     // find list of all cards that include the query
     let queriedCards = {}
