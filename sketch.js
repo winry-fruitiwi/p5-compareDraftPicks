@@ -113,6 +113,11 @@ function setup() {
     colorStrip = new ColorStrip()
 
     cellHeight = textHeight() + TEXT_BOX_PADDING*2
+
+    // hides the cursor for display later, then hides its initial position
+    noCursor()
+    mouseX = -20
+    mouseY = -20
 }
 
 
@@ -146,6 +151,16 @@ function draw() {
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     // debugCorner.showBottom()
 
+    strokeWeight(10)
+    stroke(0, 0, 80)
+
+    if (mouseIsPressed) {
+        stroke(30, 80, 70)
+        strokeWeight(8)
+    }
+
+    point(mouseX, mouseY)
+
     mouseJustReleased = false
     enterJustPressed = false
 
@@ -178,7 +193,7 @@ function cardDataDisplay() {
         0,
         textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING,
         cellHeight,
-        () => {fill(0, 0, 40)}, // hover callback function
+        () => {fill(0, 0, 30)}, // hover callback function
         () => {caliber = !caliber}, // click callback function
         color(0, 0, 40),
         color(0, 0, 80)
@@ -505,19 +520,29 @@ function cardQueryDisplay() {
         fill(0, 0, 40)
 
         // check if I'm hovering over this card name
-        if ((
+        if (
             0 < mouseX &&
             cellHeight*(i+1) + cardQueryShiftY < mouseY &&
             mouseX < textBoxWidth + TEXT_BOX_PADDING*2 &&
             mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
-            ) || i === selectedIndex
         ) {
             fill(0, 0, 30)
 
             // if I also just clicked on this card, either add it to or remove
             // it from the list of cards selected
-            if (mouseJustReleased || enterJustPressed) {
+            if (mouseJustReleased) {
+                if (!selectedCards.includes(cardName))
+                    selectedCards.push(cardName)
+                else {
+                    let cardIndex = selectedCards.indexOf(cardName)
+                    // starting from cardIndex, remove 1 element
+                    selectedCards.splice(cardIndex, 1)
+                }
+            }
+        } else if (selectedIndex === i) {
+            fill(0, 0, 30)
 
+            if (enterJustPressed) {
                 if (!selectedCards.includes(cardName))
                     selectedCards.push(cardName)
                 else {
@@ -718,8 +743,9 @@ function keyPressed() {
     if (query.length === 0) {
         queriedCardNames = []
     }
-}
 
+    selectedIndex = constrain(selectedIndex, 0, queriedCardNames.length-1)
+}
 
 // displays header for determining where data is displayed in cardDataDisplay
 function displayHeader() {
