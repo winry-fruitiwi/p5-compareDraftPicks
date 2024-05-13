@@ -23,10 +23,6 @@ class ColorStrip {
         }
     }
 
-    toggleColorSelection() {
-        // I don't think this is required
-    }
-
     // returns currently selected colors' ID (aka if this.selectors' W and U
     // selectors were on, the list would return ["W", "U"]
     currentlySelected() {
