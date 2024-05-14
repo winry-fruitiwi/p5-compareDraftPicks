@@ -4,8 +4,7 @@
  *
  *  Hello! I am Winry of the Nubcake Bakery, an unofficial team of four raiding
  *  buddies who do criterion dungeons in Final Fantasy XIV Endwalker.
- *  We are thinking of expanding our team to 8 raiding buddies, including Owen.
- *  This way we can do Pandaemonium Savages.
+ *  We are currently out of service to prepare for Dawntrail.
  *
  *  This project is like the p5.js version of py-util's compareDraftPicks
  *  tool for Magic: The Gathering. This tool allows you to quickly and easily
@@ -22,10 +21,15 @@ let variableWidthFont
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 
+
+
 // the string that you constantly modify by typing. Controls what cards
 // show up in the "what are you searching for?" box underneath the search
-// bar (WIP).
+// bar.
 let query = ""
+
+// dictionary that holds the card's PNGs
+let cardPNGs = {}
 
 // toggle to display the cursor
 let cursorDisplay = true
@@ -123,6 +127,10 @@ function setup() {
 
 function gotData() {
     cardNames = Object.keys(masterJSON)
+
+    for (let key of cardNames) {
+        cardPNGs[key] = masterJSON[key]["png"]
+    }
 }
 
 
@@ -678,6 +686,27 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
     noStroke()
     fill(tFill)
     paddedText(text, x1, y1)
+}
+
+
+// turns a decimal winrate with a lot of digits into a clean, readable winrate
+// percentage like 64.2%. Takes in a float, returns a string
+function parseDecimalWinrate(decimalWR) {
+    // this isn't actually a winrate string
+    let winrateString = decimalWR * 1000
+
+    // this makes sure that if the decimal looks like 0.6400023, then the
+    // first decimal place still shows up as 0
+    winrateString = float(round(winrateString))
+    if (winrateString % 10 === 0) {
+        winrateString /= 10
+        winrateString = str(winrateString) + ".0" + "%"
+    } else {
+        winrateString /= 10
+        winrateString = str(winrateString) + "%"
+    }
+
+    return winrateString
 }
 
 
