@@ -86,7 +86,7 @@ const TEXT_BOX_PADDING = 4
 // maximum characters allowed in the query
 const MAX_QUERY_LENGTH = 32
 // minimum width required for all elements in the sketch
-const REQUIRED_WIDTH = 800
+const REQUIRED_WIDTH = 1200
 // margin between each element in the header (i.e. the distance between
 // "grade" and "GIH WR"
 let ELEMENT_MARGIN = 20
@@ -363,6 +363,11 @@ function cardDataDisplay() {
     let grades = [
         'S ', 'A+', 'A ', 'A-', 'B+', 'B ', 'B-', 'C+', 'C ', 'C-', 'D+', 'D ', 'D-', 'F '
     ]
+
+
+    if (cardsToDisplay.length === 1) {
+        displaySingleCardStatUI(cardData)
+    }
 
     for (let i=0; i<cardData.length; i++) {
         // structure of winrates: cardData[cardName] = [winrate, grade, zScore]
