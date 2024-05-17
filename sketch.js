@@ -80,6 +80,10 @@ let selectedIndex = 0
 // on I just released enter. used for selecting items using arrow keys
 let enterJustPressed = false
 
+// whether I should display the query module or the stats module. true =
+// stats, false = query
+let statOrQueryDisplay = false
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -108,7 +112,8 @@ function setup() {
     /* initialize instruction div */
     instructions = select('#ins')
     instructions.html(`<pre>
-        numpad 1 → freeze sketch</pre>`)
+        numpad 1 → freeze sketch
+        ctrl+enter → toggle between card stats and query display</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
 
@@ -143,21 +148,20 @@ function draw() {
     rectMode(CORNER)
     background(0, 0, 9)
 
-    cardDataDisplay()
+    if (statOrQueryDisplay) {
+        cardDataDisplay()
+    } else {
+        cardQueryDisplay()
+    }
 
     // no translation right now, but I need to do this so that
     // cardQueryDisplay() doesn't run into cardDataDisplay()'s
     // display. translation computed in cardDataDisplay()
-    push()
-    translate(0, cardQueryShiftY)
-
-    cardQueryDisplay()
-    pop()
-
-    /* debugCorner needs to be last so its z-index is highest */
-    debugCorner.setText(`frameCount: ${frameCount}`, 2)
-    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    // debugCorner.showBottom()
+    // push()
+    // translate(0, cardQueryShiftY)
+    //
+    // cardQueryDisplay()
+    // pop()
 
     strokeWeight(10)
     stroke(0, 0, 80)
@@ -171,6 +175,11 @@ function draw() {
 
     mouseJustReleased = false
     enterJustPressed = false
+
+    /* debugCorner needs to be last so its z-index is highest */
+    debugCorner.setText(`frameCount: ${frameCount}`, 2)
+    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
+    // debugCorner.showBottom()
 
     // if (frameCount > 3000)
     //     noLoop()
@@ -493,7 +502,9 @@ function cardDataDisplay() {
 
     pop()
 
-    cardQueryShiftY += cellHeight*2 + cellHeight * cardData.length + 10
+    cardQueryShiftY = cellHeight*3 + cellHeight * cardData.length
+
+    requiredHeight = cardQueryShiftY
 }
 
 // displays the interactive card querying module, which handles querying each
@@ -610,8 +621,7 @@ function cardQueryDisplay() {
 
     let longestListLength = max(queriedCardNames.length+1, selectedCards.length)
 
-    requiredHeight = cardQueryShiftY
-    requiredHeight += TEXT_BOX_PADDING + cellHeight*(longestListLength)
+    requiredHeight = TEXT_BOX_PADDING + cellHeight*(longestListLength)
 
     // adds the "Query Data" button at the top.
     // note that "Query Data (WIP)" is displayed if I'm still working on it.
@@ -646,7 +656,7 @@ function hoverQueryData() {
     fill(0, 0, 30)
 }
 
-// onClick callback function for Query Data button
+// onClick callback function for Query Data button, but can be called elsewhere
 function clickQueryData() {
     cardsToDisplay = selectedCards.slice()
 
@@ -657,6 +667,8 @@ function clickQueryData() {
             JSON.stringify(masterJSON[cardName], null, 2)
         )
     }
+
+    statOrQueryDisplay = !statOrQueryDisplay
 }
 
 
@@ -982,6 +994,11 @@ function keyPressed() {
     if (key === '`') { /* toggle debug corner visibility */
         debugCorner.visible = !debugCorner.visible
         console.log(`debugCorner visibility set to ${debugCorner.visible}`)
+    }
+
+    if (keyIsDown(CONTROL) && keyIsDown(ENTER)) {
+        clickQueryData()
+        return
     }
 
     // if the user pressed anything other than a modifier key, modify the
