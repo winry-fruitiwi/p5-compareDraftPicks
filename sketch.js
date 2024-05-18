@@ -93,7 +93,7 @@ const MAX_QUERY_LENGTH = 32
 const REQUIRED_WIDTH = 1200
 // margin between each element in the header (i.e. the distance between
 // "grade" and "GIH WR"
-let ELEMENT_MARGIN = 20
+let ELEMENT_MARGIN = 40
 
 
 function preload() {
@@ -379,6 +379,8 @@ function cardDataDisplay() {
 
             if (pair === "ALL") {
                 pair = currentCard
+            } else {
+                alsa = "NaN"
             }
 
             unsortedCardData[pair] = [winrate, grade, zScore, alsa, numPlayed]
@@ -443,9 +445,15 @@ function cardDataDisplay() {
 
         // do the same for ALSA but without the % at the end
         // get the first three digits and round everything else away
-        let ALSA = round(rawALSA * 100)
-        ALSA = str(ALSA)
-        ALSA = ALSA.slice(0, 1) + "." + ALSA.slice(1)
+        let ALSA
+
+        if (rawALSA === "NaN") {
+            ALSA = ""
+        } else {
+            ALSA = round(rawALSA * 100)
+            ALSA = str(ALSA)
+            ALSA = ALSA.slice(0, 1) + "." + ALSA.slice(1)
+        }
 
         noStroke()
         fill(0, 0, 80)
@@ -487,7 +495,9 @@ function cardDataDisplay() {
         textAlign(LEFT, TOP)
         noStroke()
         fill(0, 0, 80)
-        text(ALSA, currentPos - ELEMENT_MARGIN * 2 - textWidth(" "),
+        // not sure why the position has to be like this, but it works
+        // better this way?
+        text(ALSA, currentPos - ELEMENT_MARGIN - textWidth(" ")*7/2,
             cellHeight * (i + 1) + TEXT_BOX_PADDING)
 
         let zScoreLeftEdge = currentPos + ELEMENT_MARGIN
