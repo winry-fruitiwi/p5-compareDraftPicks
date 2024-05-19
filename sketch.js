@@ -362,6 +362,13 @@ function cardDataDisplay() {
         }
     }
 
+    let cardData = Object.entries(unsortedCardData);
+
+    // b[1][2] is the z-score of card B, a[1][2] is the z-score of card A
+    cardData.sort((a, b) => {
+        return b[1][2] - a[1][2]
+    });
+
     if (Object.keys(unsortedCardData).length === 1) {
         let currentCard = Object.keys(unsortedCardData)[0]
 
@@ -386,15 +393,12 @@ function cardDataDisplay() {
             unsortedCardData[pair] = [winrate, grade, zScore, alsa, numPlayed]
         }
 
-        // cardData = unsortedCardData
+        cardData = Object.entries(unsortedCardData)
+
+        // moves the last element to the beginning of the list
+        cardData.unshift(cardData.pop())
     }
 
-    let cardData = Object.entries(unsortedCardData);
-
-    // b[1][2] is the z-score of card B, a[1][2] is the z-score of card A
-    cardData.sort((a, b) => {
-        return b[1][2] - a[1][2]
-    });
 
     let grades = [
         'S ', 'A+', 'A ', 'A-', 'B+', 'B ', 'B-', 'C+', 'C ', 'C-', 'D+', 'D ', 'D-', 'F '
@@ -419,7 +423,7 @@ function cardDataDisplay() {
 
         textAlign(LEFT, TOP)
         // you have to give Jem Lightfoote, Sky Explorer some respect for
-        // its long card name.
+        // her very long card name.
         paddedText(
             numPlayed,
             textWidth(" ")*32 + 3*TEXT_BOX_PADDING,
@@ -576,9 +580,9 @@ function cardQueryDisplay() {
         // check if I'm hovering over this card name
         if (
             0 < mouseX &&
-            cellHeight*(i+1) + cardQueryShiftY < mouseY &&
+            cellHeight*(i+1) < mouseY &&
             mouseX < textBoxWidth + TEXT_BOX_PADDING*2 &&
-            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY
+            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
         ) {
             fill(0, 0, 30)
 
@@ -611,9 +615,9 @@ function cardQueryDisplay() {
 
             if (
                 (0 < mouseX &&
-                cellHeight*(i+1) + cardQueryShiftY < mouseY &&
+                cellHeight*(i+1) < mouseY &&
                 mouseX < textBoxWidth+TEXT_BOX_PADDING*2 &&
-                mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 + cardQueryShiftY)
+                mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2)
                 || selectedIndex === i
             ) {
                 fill(100, 60, 50)
@@ -717,9 +721,9 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
     // handle hovering check. call the callback function
     if (
         x1 < mouseX &&
-        y1 + cardQueryShiftY < mouseY &&
+        y1 < mouseY &&
         mouseX < x1 + w &&
-        mouseY < y1 + h + cardQueryShiftY
+        mouseY < y1 + h
     ) {
         onHover()
 
