@@ -362,9 +362,34 @@ function cardDataDisplay() {
         }
     }
 
+    if (Object.keys(unsortedCardData).length === 1) {
+        let currentCard = Object.keys(unsortedCardData)[0]
+
+        unsortedCardData = {}
+
+        for (let pair of Object.keys(masterJSON[currentCard]["stats"][caliberQuery])) {
+            let data = masterJSON[currentCard]["stats"][caliberQuery][pair]
+            let winrate = data[`${queriedWR} WR`]
+            let grade = data[`${queriedWR} grade`]
+            let zScore = data[`${queriedWR} zscore`]
+            let alsa = data[`ALSA`]
+            let numPlayed = data[`# GIH`]
+
+            pair = pair.toUpperCase()
+
+            if (pair === "ALL") {
+                pair = currentCard
+            }
+
+            unsortedCardData[pair] = [winrate, grade, zScore, alsa, numPlayed]
+        }
+
+        // cardData = unsortedCardData
+    }
+
     let cardData = Object.entries(unsortedCardData);
 
-    // b[1][1] is the z-score of card B, a[1][1] is the z-score of card A
+    // b[1][2] is the z-score of card B, a[1][2] is the z-score of card A
     cardData.sort((a, b) => {
         return b[1][2] - a[1][2]
     });
@@ -372,11 +397,6 @@ function cardDataDisplay() {
     let grades = [
         'S ', 'A+', 'A ', 'A-', 'B+', 'B ', 'B-', 'C+', 'C ', 'C-', 'D+', 'D ', 'D-', 'F '
     ]
-
-
-    if (cardsToDisplay.length === 1) {
-        displaySingleCardStatUI(cardData)
-    }
 
     for (let i=0; i<cardData.length; i++) {
         // structure of winrates: cardData[cardName] = [winrate, grade, zScore]
@@ -706,274 +726,28 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
 }
 
 
-// turns a decimal winrate with a lot of digits into a clean, readable winrate
-// percentage like 64.2%. Takes in a float, returns a string
-function parseDecimalWinrate(decimalWR) {
-    // this isn't actually a winrate string
-    let winrateString = decimalWR * 1000
-
-    // this makes sure that if the decimal looks like 0.6400023, then the
-    // first decimal place still shows up as 0
-    winrateString = float(round(winrateString))
-    if (winrateString % 10 === 0) {
-        winrateString /= 10
-        winrateString = str(winrateString) + ".0" + "%"
-    } else {
-        winrateString /= 10
-        winrateString = str(winrateString) + "%"
-    }
-
-    return winrateString
-}
-
-
-function displaySingleCardStatUI(currentCard) {
-    // rect margin should be based on height/width
-    const SIDE_MARGIN = width / 10
-    const VERTICAL_MARGIN = windowHeight / 10
-    const LEFT_HEADER_MARGIN = 30
-    const VERTICAL_HEADER_MARGIN = 30
-
-    // window width and height
-    const WIDTH = width - (SIDE_MARGIN * 2)
-    const HEIGHT = windowHeight - (VERTICAL_MARGIN * 2)
-
-    // top margin of stat/card display
-    const DECK_ANALYSIS_TOP_MARGIN = 40
-    const CARD_TOP_MARGIN = 25
-    const CARD_WIDTH = 340
-
-    // width-to-widgetWidth ratios in 17L
-    // deck analysis widget width
-    const DECK_ANALYSIS_PROPORTION = 45 / 100
-    // all widget height
-    const WIDGET_HEIGHT_PROPORTION = 5.6 / 8
-    // gray rectangle in deck analysis widget width
-    const GRAY_RECT_PROPORTION = 17 / 45
-    const GRADE_BORDER_MARGIN = 25
-
-    // "More 17L Stats" widget box padding
-    const MORE_STATS_BOX_PADDING = 25
-
-    let grades = [
-        'S ', 'A+', 'A ', 'A-', 'B+', 'B ', 'B-', 'C+', 'C ', 'C-', 'D+', 'D ', 'D-', 'F '
-    ]
-
-    // translate so that I don't have to add the side margin and
-    // scrollY+vertical margin every time I want to draw something, as I'll be
-    // drawing a lot of widgets on this.
-    push()
-    translate(SIDE_MARGIN, scrollY + VERTICAL_MARGIN)
-
-    // background for detailed stat screen
-    fill(0, 0, 9)
-    rect(0, 0, WIDTH, HEIGHT, 15)
-
-    // window header (card name)
-    textFont(variableWidthFont)
-    textSize(30)
-    textAlign(LEFT, TOP)
-    fill(0, 0, 80)
-    stroke(0, 0, 80)
-    strokeWeight(0.8)
-    text(currentCard["name"], LEFT_HEADER_MARGIN, VERTICAL_HEADER_MARGIN)
-
-    // line separating window header and the rest of the card widgets. Has to
-    // account for text height.
-    stroke(0, 0, 0)
-    strokeWeight(1)
-    // *2 because I'm accounting for both top and bottom margin of the text
-    // header
-    line(0, VERTICAL_HEADER_MARGIN * 2 + textAscent(),
-        WIDTH, VERTICAL_HEADER_MARGIN * 2 + textAscent()
-    )
-
-    translate(LEFT_HEADER_MARGIN,
-        VERTICAL_HEADER_MARGIN * 2 + textAscent() + DECK_ANALYSIS_TOP_MARGIN
-    )
+// // turns a decimal winrate with a lot of digits into a clean, readable winrate
+// // percentage like 64.2%. Takes in a float, returns a string
+// function parseDecimalWinrate(decimalWR) {
+//     // this isn't actually a winrate string
+//     let winrateString = decimalWR * 1000
+//
+//     // this makes sure that if the decimal looks like 0.6400023, then the
+//     // first decimal place still shows up as 0
+//     winrateString = float(round(winrateString))
+//     if (winrateString % 10 === 0) {
+//         winrateString /= 10
+//         winrateString = str(winrateString) + ".0" + "%"
+//     } else {
+//         winrateString /= 10
+//         winrateString = str(winrateString) + "%"
+//     }
+//
+//     return winrateString
+// }
 
 
-    /* card image */
-    if (!(cardPNGs[currentCard["name"]] instanceof p5.Image))
-        cardPNGs[currentCard["name"]] = loadImage(cardPNGs[currentCard["name"]])
-    imageMode(CORNER)
-    let img = cardPNGs[currentCard["name"]]
-
-    if (img instanceof p5.Image) {
-        img.resize(CARD_WIDTH, 0)
-        image(img, 0, textAscent() + CARD_TOP_MARGIN)
-    } else {
-        return
-    }
-
-    let imgWidth = img.width
-
-    // set the remaining space
-    let remainingSpace = WIDTH - imgWidth - LEFT_HEADER_MARGIN * 2
-
-    translate(imgWidth + LEFT_HEADER_MARGIN, 0)
-
-
-    /* "Deck Analysis" widget */
-    noStroke()
-    textSize(22)
-    text("Deck Analysis", 0, 0)
-
-    let deckAnalysisWidth = remainingSpace * DECK_ANALYSIS_PROPORTION
-
-    stroke(0, 0, 0)
-    noFill()
-    strokeWeight(1)
-    rect(0, textAscent() + CARD_TOP_MARGIN,
-        deckAnalysisWidth, HEIGHT * WIDGET_HEIGHT_PROPORTION)
-
-    fill(0, 0, 14)
-    noStroke()
-    rect(0, textAscent() + CARD_TOP_MARGIN,
-        deckAnalysisWidth * GRAY_RECT_PROPORTION, HEIGHT * WIDGET_HEIGHT_PROPORTION)
-
-    // height of one cell in the deck analysis
-    let cellHeight = HEIGHT * WIDGET_HEIGHT_PROPORTION / 5
-    let cellWidth = deckAnalysisWidth - GRADE_BORDER_MARGIN * 2
-
-    let pairs = Object.keys(currentCard["stats"]["all"])
-
-    // use two calls of splice() to move "all" to the beginning of the list
-    let lastElement = pairs.splice(pairs.length - 1, 1)[0]
-
-    pairs.splice(0, 0, lastElement)
-
-    // makes sure that more than five color pairs are not displayed (otherwise,
-    // the color pairs overflow and look messy)
-    let numPairsDisplayed = 0
-    let grayRectWidth = (deckAnalysisWidth * GRAY_RECT_PROPORTION)
-
-    for (let i = 0; i < pairs.length; i++) {
-        // draw color pairs and their respective winrates, starting at "AVG/ALL"
-        let pair = pairs[i]
-        textAlign(CENTER, TOP)
-        fill(0, 0, 80)
-        noStroke()
-        text(pair.toUpperCase(), deckAnalysisWidth * GRAY_RECT_PROPORTION / 2,
-            textAscent() + CARD_TOP_MARGIN + cellHeight / 2 + cellHeight * i
-        )
-
-        let cardWinrate = parseDecimalWinrate(currentCard["stats"]["all"][pair]["GIH WR"])
-
-        let grade = currentCard["stats"]["all"][pair]["GIH grade"]
-
-        textAlign(LEFT, TOP)
-        textFont(variableWidthFont, 22)
-        text(cardWinrate,
-            // the middle, or average, of the space between the right edges of the
-            // deck analysis widget and the gray rectangle within
-            (deckAnalysisWidth + grayRectWidth) / 2,
-            textAscent() + CARD_TOP_MARGIN + cellHeight / 2 + cellHeight * i)
-
-        // displays rectangles that should cover the grades
-        noFill()
-        stroke(137 - 11 * grades.indexOf(grade), 82, 77)
-        strokeWeight(3)
-        rect(grayRectWidth + GRADE_BORDER_MARGIN,
-            textAscent() + CARD_TOP_MARGIN + cellHeight * i + GRADE_BORDER_MARGIN,
-            deckAnalysisWidth - grayRectWidth - 2 * GRADE_BORDER_MARGIN,
-            cellHeight - GRADE_BORDER_MARGIN
-        )
-
-        // the distance between the end of the card winrate text and the end
-        // of the grade border
-        let winrateMargin = cellWidth / 2 - textWidth(str(cardWinrate))
-        print(winrateMargin)
-
-
-        // display the rectangle to the left of the winrate, near the left edge
-        // of the box surrounding the winrate up to the winrate itself
-        fill(137 - 11 * grades.indexOf(grade), 82, 77)
-        rect(grayRectWidth + GRADE_BORDER_MARGIN,
-            textAscent() + CARD_TOP_MARGIN + cellHeight * i + GRADE_BORDER_MARGIN,
-            cellWidth / 2 - winrateMargin,
-            cellHeight - GRADE_BORDER_MARGIN
-        )
-
-        // width of a single character, assuming a monospace font
-        textFont(fixedWidthFont, 30)
-        let singleCharWidth = textWidth("A")
-
-        fill(0, 0, 0)
-        strokeWeight(1)
-        stroke(0, 0, 0)
-        textAlign(LEFT, CENTER)
-        text(grade,
-            grayRectWidth + GRADE_BORDER_MARGIN + (cellWidth / 2 - winrateMargin) / 2 - singleCharWidth,
-            textAscent() + CARD_TOP_MARGIN + cellHeight * i + GRADE_BORDER_MARGIN
-            + (cellHeight - GRADE_BORDER_MARGIN) / 2
-        )
-
-        textFont(variableWidthFont, 22)
-
-
-        numPairsDisplayed++
-        if (numPairsDisplayed >= 5)
-            break
-    }
-
-
-    translate(deckAnalysisWidth + LEFT_HEADER_MARGIN, 0)
-
-    /* "More 17L Stats" widget, but not all 17L stats */
-    noStroke()
-    fill(0, 0, 80)
-    textAlign(LEFT, TOP)
-    text("More 17L Stats", 0, 0)
-
-    // calculate remaining space left to use
-    remainingSpace -= remainingSpace * DECK_ANALYSIS_PROPORTION + LEFT_HEADER_MARGIN * 2
-
-    stroke(0, 0, 0)
-    noFill()
-    strokeWeight(1)
-
-    rect(0,
-        textAscent() + CARD_TOP_MARGIN,
-        remainingSpace,
-        HEIGHT * WIDGET_HEIGHT_PROPORTION)
-
-    let allPlayerStats = currentCard["stats"]["all"]["all"]
-
-    translate(0, textAscent() + CARD_TOP_MARGIN + MORE_STATS_BOX_PADDING)
-
-    // dictionary of messages to display in the "more stats" page
-    let messages = {
-        "Average last seen at/ALSA": round(allPlayerStats["ALSA"] * 100) / 100,
-        "Games played": allPlayerStats["# GIH"],
-        "Opening hand winrate": parseDecimalWinrate(allPlayerStats["OH WR"]),
-        "Game drawn winrate": parseDecimalWinrate(allPlayerStats["GD WR"]),
-        "Improvement when drawn": str(round(allPlayerStats["IWD"] * 1000) / 10) + "pp"
-    }
-
-    noStroke()
-    fill(0, 0, 80)
-
-    for (let i = 0; i < Object.keys(messages).length; i++) {
-        let message = Object.keys(messages)[i]
-        let lineHeight = textAscent() + textDescent() + 20 // 20 = vertical margin
-
-        // display the actual message
-        textAlign(LEFT, CENTER)
-        textFont(variableWidthFont, 16)
-        text(message, MORE_STATS_BOX_PADDING,
-            i * (lineHeight))
-
-        // display the value that the message defines
-        textAlign(RIGHT, CENTER)
-        textFont(font, 16)
-        text(messages[message],
-            remainingSpace - MORE_STATS_BOX_PADDING,
-            i * (lineHeight) + textDescent() / 2) // not sure why this works?
-    }
-
-    pop()
-}
+function displaySingleCardStatUI(currentCard) {}
 
 
 // displays text, but padded with a custom amount of padding. Default is
