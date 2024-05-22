@@ -84,6 +84,9 @@ let enterJustPressed = false
 // stats, false = query
 let statOrQueryDisplay = false
 
+// calls displayCard if this flag is true
+let ifDisplayCard = false
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -183,6 +186,14 @@ function draw() {
 
     // if (frameCount > 3000)
     //     noLoop()
+
+    if (mouseIsPressed) {
+        ifDisplayCard = false
+    }
+
+    if (ifDisplayCard) {
+        displayCardImage()
+    }
 }
 
 
@@ -441,8 +452,7 @@ function cardDataDisplay() {
             0 < mouseX &&
             cellHeight * (i+3) < mouseY) {
             if (mouseJustReleased) {
-                fill(0, 0, 0, 12)
-                rect(0, 0, width, height)
+                ifDisplayCard = true
             }
 
             fill(0, 0, 100, 12)
@@ -776,7 +786,11 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
 
 
 // load the associated card's card image
-function displayCardImage(cardName) {}
+function displayCardImage(/*cardName*/) {
+    noStroke()
+    fill(0, 0, 0, 50)
+    rect(-1, -1, width+1, height+1)
+}
 
 
 // displays text, but padded with a custom amount of padding. Default is
@@ -811,10 +825,12 @@ function keyPressed() {
     if (key !== "`" && key.length === 1 && query.length < MAX_QUERY_LENGTH && !statOrQueryDisplay) {
         query += key
         selectedIndex = 0
+        ifDisplayCard = false
     } else if (keyCode === BACKSPACE){
         // delete the last element of query
         query = query.slice(0, -1)
         selectedIndex = 0
+        ifDisplayCard = false
     }
     else if (keyCode === ENTER)
         enterJustPressed = true
