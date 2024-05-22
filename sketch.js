@@ -434,6 +434,20 @@ function cardDataDisplay() {
         noStroke()
         // this essentially alternates alpha between 0 and 20
         fill(0, 0, 100, (i + 1) % 2 * 5 + 5)
+
+        // has to account for translations
+        if (mouseX < width &&
+            mouseY < cellHeight * (i+4) &&
+            0 < mouseX &&
+            cellHeight * (i+3) < mouseY) {
+            if (mouseJustReleased) {
+                fill(0, 0, 0, 12)
+                rect(0, 0, width, height)
+            }
+
+            fill(0, 0, 100, 12)
+        }
+
         rect(0, cellHeight * (i + 1),
             width, cellHeight
         )
@@ -761,7 +775,8 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
 // }
 
 
-function displaySingleCardStatUI(currentCard) {}
+// load the associated card's card image
+function displayCardImage(cardName) {}
 
 
 // displays text, but padded with a custom amount of padding. Default is
@@ -793,7 +808,7 @@ function keyPressed() {
     // query string accordingly. Otherwise, remove the last character from
     // the query. Also, if the length of the query exceeds the maximum
     // character cap, don't add the character.
-    if (key !== "`" && key.length === 1 && query.length < MAX_QUERY_LENGTH) {
+    if (key !== "`" && key.length === 1 && query.length < MAX_QUERY_LENGTH && !statOrQueryDisplay) {
         query += key
         selectedIndex = 0
     } else if (keyCode === BACKSPACE){
