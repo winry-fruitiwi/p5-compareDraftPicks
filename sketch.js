@@ -450,7 +450,8 @@ function cardDataDisplay() {
         if (mouseX < width &&
             mouseY < cellHeight * (i+4) &&
             0 < mouseX &&
-            cellHeight * (i+3) < mouseY) {
+            cellHeight * (i+3) < mouseY &&
+            !ifDisplayCard) {
             if (mouseJustReleased) {
                 ifDisplayCard = true
             }
@@ -606,7 +607,8 @@ function cardQueryDisplay() {
             0 < mouseX &&
             cellHeight*(i+1) < mouseY &&
             mouseX < textBoxWidth + TEXT_BOX_PADDING*2 &&
-            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2
+            mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2 &&
+            !ifDisplayCard
         ) {
             fill(0, 0, 30)
 
@@ -642,7 +644,8 @@ function cardQueryDisplay() {
                 cellHeight*(i+1) < mouseY &&
                 mouseX < textBoxWidth+TEXT_BOX_PADDING*2 &&
                 mouseY < cellHeight*(i+1) + textHeight() + TEXT_BOX_PADDING*2)
-                || selectedIndex === i
+                || selectedIndex === i &&
+                !ifDisplayCard
             ) {
                 fill(100, 60, 50)
             }
@@ -747,7 +750,8 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
         x1 < mouseX &&
         y1 < mouseY &&
         mouseX < x1 + w &&
-        mouseY < y1 + h
+        mouseY < y1 + h &&
+        !ifDisplayCard
     ) {
         onHover()
 
@@ -815,6 +819,7 @@ function keyPressed() {
 
     if (keyIsDown(CONTROL) && keyIsDown(ENTER)) {
         clickQueryData()
+        ifDisplayCard = false
         return
     }
 
