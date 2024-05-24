@@ -87,6 +87,9 @@ let statOrQueryDisplay = false
 // calls displayCard if this flag is true
 let ifDisplayCard = false
 
+// the card whose image must be displayed
+let cardImgName
+
 /* constants */
 // the padding of the text box
 const TEXT_BOX_PADDING = 4
@@ -192,7 +195,7 @@ function draw() {
     }
 
     if (ifDisplayCard) {
-        displayCardImage()
+        displayCardImage(cardImgName)
     }
 }
 
@@ -454,6 +457,7 @@ function cardDataDisplay() {
             !ifDisplayCard) {
             if (mouseJustReleased) {
                 ifDisplayCard = true
+                cardImgName = cardName
             }
 
             fill(0, 0, 100, 12)
@@ -790,10 +794,19 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
 
 
 // load the associated card's card image
-function displayCardImage(/*cardName*/) {
+function displayCardImage(cardName) {
     noStroke()
     fill(0, 0, 0, 50)
     rect(-1, -1, width+1, height+1)
+
+    if (!(cardPNGs[cardName] instanceof p5.Image))
+        cardPNGs[cardName] = loadImage(cardPNGs[cardName])
+    let img = cardPNGs[cardName]
+
+    if (img) {
+        imageMode(CORNER)
+        image(img, 0, 0)
+    }
 }
 
 
