@@ -95,8 +95,10 @@ let cardImgName
 const TEXT_BOX_PADDING = 4
 // maximum characters allowed in the query
 const MAX_QUERY_LENGTH = 32
-// minimum width required for all elements in the sketch
-const REQUIRED_WIDTH = 1200
+// minimum width required for all elements in the sketch. don't resize this
+// below 900 or else elements will collide, and also don't go over 1200 or
+// else it's a bit too wide.
+const REQUIRED_WIDTH = 950
 // margin between each element in the header (i.e. the distance between
 // "grade" and "GIH WR"
 let ELEMENT_MARGIN = 40
@@ -804,8 +806,11 @@ function displayCardImage(cardName) {
     let img = cardPNGs[cardName]
 
     if (img) {
+        requiredHeight = max(requiredHeight, 500)
+        img.resize(0, 500)
+
         imageMode(CORNER)
-        image(img, 0, 0)
+        image(img, width/2 - img.width/2, 0) // centers the image horizontally
     }
 }
 
