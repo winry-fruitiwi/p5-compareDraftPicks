@@ -121,7 +121,8 @@ function setup() {
     instructions = select('#ins')
     instructions.html(`<pre>
         numpad 1 → freeze sketch
-        ctrl+enter → toggle between card stats and query display</pre>`)
+        ctrl+enter → toggle between card stats and query display
+        click on card stat row to see card image</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
 
@@ -171,16 +172,6 @@ function draw() {
     // cardQueryDisplay()
     // pop()
 
-    strokeWeight(10)
-    stroke(0, 0, 80)
-
-    if (mouseIsPressed) {
-        stroke(30, 80, 70)
-        strokeWeight(8)
-    }
-
-    point(mouseX, mouseY)
-
     mouseJustReleased = false
     enterJustPressed = false
 
@@ -199,6 +190,26 @@ function draw() {
     if (ifDisplayCard) {
         displayCardImage(cardImgName)
     }
+
+    displayMouseCursor()
+}
+
+
+// displays the mouse as a white dot on the screen that changes to a darker
+// orange when the mouse is down. used mainly for filming videos of my
+// project so that viewers can see more easily what I'm doing with the
+// mouse. Unfortunately leads to hiccups where the screen is resized and the
+// mouse cursor point stays in place.
+function displayMouseCursor() {
+    strokeWeight(10)
+    stroke(0, 0, 100)
+
+    if (mouseIsPressed) {
+        stroke(30, 80, 80)
+        strokeWeight(8)
+    }
+
+    point(mouseX, mouseY)
 }
 
 
@@ -797,20 +808,30 @@ function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
 
 // load the associated card's card image
 function displayCardImage(cardName) {
-    noStroke()
-    fill(0, 0, 0, 50)
-    rect(-1, -1, width+1, height+1)
+    // ensures that the screen is not darkened when the card image does not
+    // exist
+    if (cardPNGs[cardName]) {
+        // darken the screen
+        noStroke()
+        fill(0, 0, 0, 50)
+        rect(-1, -1, width+1, height+1)
 
-    if (!(cardPNGs[cardName] instanceof p5.Image))
-        cardPNGs[cardName] = loadImage(cardPNGs[cardName])
-    let img = cardPNGs[cardName]
+        // check if the image is actually load it, then resize the canvas so
+        // that it fits and display it
+        if (!(cardPNGs[cardName] instanceof p5.Image))
+            cardPNGs[cardName] = loadImage(cardPNGs[cardName])
+        let img = cardPNGs[cardName]
 
-    if (img) {
-        requiredHeight = max(requiredHeight, 500)
-        img.resize(0, 500)
+        if (img) {
+            requiredHeight = max(requiredHeight, 500)
+            img.resize(0, 500)
 
-        imageMode(CORNER)
-        image(img, width/2 - img.width/2, 0) // centers the image horizontally
+            imageMode(CORNER)
+            // centers the image on the canvas
+            image(img, width/2 - img.width/2, height/2 - img.height/2)
+        }
+    } else {
+        ifDisplayCard = false
     }
 }
 
