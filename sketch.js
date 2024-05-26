@@ -122,6 +122,7 @@ function setup() {
     instructions.html(`<pre>
         numpad 1 → freeze sketch
         ctrl+enter → toggle between card stats and query display
+        ctrl+backspace → delete ENTIRE query, not to last space/symbol
         click on card stat row to see card image</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
@@ -860,6 +861,12 @@ function keyPressed() {
         clickQueryData()
         ifDisplayCard = false
         return
+    }
+
+    // rather than deleting back to the last symbol/space, pressing
+    // ctrlBackspace will simply delete all characters in the query.
+    if (keyIsDown(CONTROL) && keyIsDown(BACKSPACE)) {
+        query = ""
     }
 
     // if the user pressed anything other than a modifier key, modify the
