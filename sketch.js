@@ -253,10 +253,6 @@ function cardDataDisplay() {
         color(0, 0, 80)
     )
 
-    // color strip display
-    let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
-    colorStrip.render(circleStartPos, cellHeight/2)
-
     let currentlySelected = colorStrip.currentlySelected()
 
     noStroke()
@@ -434,6 +430,14 @@ function cardDataDisplay() {
 
         // moves the last element to the beginning of the list
         cardData.unshift(cardData.pop())
+    } else if (cardsToDisplay) {
+        push()
+        translate(0, -cellHeight*2)
+
+        // color strip display
+        let circleStartPos = textWidth(caliberButtonText) + 2*TEXT_BOX_PADDING + 50
+        colorStrip.render(circleStartPos, cellHeight/2)
+        pop()
     }
 
 
