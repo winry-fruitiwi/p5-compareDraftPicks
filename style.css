@@ -1,5 +1,6 @@
 html, body {
     background-color: rgb(32, 33, 51);
+    /*background-color: rgb(23, 23, 23);*/
     color: gainsboro;
 }
 
@@ -13,6 +14,6 @@ body {
     color: gainsboro;
     padding: 2px 4px 2px 4px;
     font-family: consolas;
-    font-size: 12px;
+    font-size: 14px;
     height: 100px;
 }

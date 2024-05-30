@@ -101,7 +101,7 @@ const MAX_QUERY_LENGTH = 32
 const REQUIRED_WIDTH = 950
 // margin between each element in the header (i.e. the distance between
 // "grade" and "GIH WR"
-let ELEMENT_MARGIN = 40
+const ELEMENT_MARGIN = 40
 
 
 function preload() {
@@ -186,6 +186,15 @@ function draw() {
 
     if (mouseIsPressed) {
         ifDisplayCard = false
+    }
+
+    // if the user is currently holding down backspace and it's the first
+    // frame, change the backspaceDownStart time to the current frame.
+    // otherwise, change it to false if backspace is not down. finally, if
+    // the backspaceDownStart key has been down for longer than 1000ms,
+    // start rapidly deleting characters from the end of the query.
+    if (keyIsDown(BACKSPACE)) {
+
     }
 
     if (ifDisplayCard) {
