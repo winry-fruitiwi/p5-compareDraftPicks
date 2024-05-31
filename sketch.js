@@ -262,45 +262,49 @@ function cardDataDisplay() {
         width/2, TEXT_BOX_PADDING)
 
     if (currentlySelected.length === 2) {
-        let buttonText = "select: " + currentlySelected
+        // let buttonText = "select: " + currentlySelected
+        //
+        // textAlign(LEFT, TOP)
+        // renderButton(
+        //     buttonText,                                         // text
+        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
+        //     0,                                                  // y
+        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
+        //     cellHeight,                                         // h
+        //     () => {fill(0, 0, 30)},                             // onHover
+        //     () => {colorPair = currentlySelected.toLowerCase()},// onClick
+        //     color(0, 0, 40),                                    // rectFill
+        //     color(0, 0, 80)                                     // textFill
+        // )
 
-        textAlign(LEFT, TOP)
-        renderButton(
-            buttonText,                                         //text
-            width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
-            0,                                                  // y
-            TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
-            cellHeight,                                         // h
-            () => {fill(0, 0, 30)},                             // onHover
-            () => {colorPair = currentlySelected.toLowerCase()},// onClick
-            color(0, 0, 40),                                    // rectFill
-            color(0, 0, 80)                                     // textFill
-        )
+        colorPair = currentlySelected.toLowerCase()
     }
 
     else if (currentlySelected.length === 0) {
-        let buttonText = "select: all"
+        // let buttonText = "select: all"
+        //
+        // textAlign(LEFT, TOP)
+        // renderButton(
+        //     buttonText,                                         //text
+        //     width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
+        //     0,                                                  // y
+        //     TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
+        //     cellHeight,                                         // h
+        //     () => {fill(0, 0, 30)},                             // onHover
+        //     () => {colorPair = "all"},                          // onClick
+        //     color(0, 0, 40),                                    // rectFill
+        //     color(0, 0, 80)                                     // textFill
+        // )
 
-        textAlign(LEFT, TOP)
-        renderButton(
-            buttonText,                                         //text
-            width - TEXT_BOX_PADDING*2 - textWidth(buttonText), // x
-            0,                                                  // y
-            TEXT_BOX_PADDING * 2 + textWidth(buttonText),       // w
-            cellHeight,                                         // h
-            () => {fill(0, 0, 30)},                             // onHover
-            () => {colorPair = "all"},// onClick
-            color(0, 0, 40),                                    // rectFill
-            color(0, 0, 80)                                     // textFill
-        )
+        colorPair = "all"
     }
 
     else {
-        textAlign(RIGHT, TOP)
-        fill(0, 0, 80)
-        text("please select 0 or 2 colors",
-            width - TEXT_BOX_PADDING,
-            TEXT_BOX_PADDING)
+        // textAlign(RIGHT, TOP)
+        // fill(0, 0, 80)
+        // text("please select 0 or 2 colors",
+        //     width - TEXT_BOX_PADDING,
+        //     TEXT_BOX_PADDING)
     }
 
     push()
@@ -713,7 +717,7 @@ function cardQueryDisplay() {
 
     let longestListLength = max(queriedCardNames.length+1, selectedCards.length)
 
-    requiredHeight = TEXT_BOX_PADDING + cellHeight*(longestListLength)
+    requiredHeight = cellHeight*(longestListLength)
 
     // adds the "Query Data" button at the top.
     // note that "Query Data (WIP)" is displayed if I'm still working on it.
