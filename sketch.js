@@ -752,6 +752,44 @@ function hoverQueryData() {
     fill(0, 0, 30)
 }
 
+// checks if a card is a "secret gold card" or "top secret card" based on
+// its data. returns either null if no secret is found, or the particular
+// secret it uncovered.
+function uncoverSecrets(cardName) {
+    let cardData = masterJSON[cardName]
+
+    // required for checking if the card data exists, if it's not a color pair
+    if (cardData) {
+        let cardStatsAll = cardData["stats"]["all"]
+        let pairs = Object.keys(cardStatsAll)
+
+        let bestPair = null
+
+        // length - 2 because the all stat is always at the end, and we don't
+        // need to check if that is better than every other pair
+        for (let i = 0; i < pairs.length - 2; i++) {
+            let pair1 = pairs[i]
+            let pair1Z = cardStatsAll[pair1][`${queriedWR} zscore`]
+
+            // start doing handshake comparisons
+            for (let j = 0; i < pairs.length - 1; i++) {
+                let pair2 = pairs[j]
+                let pair2Z = cardStatsAll[pair2][`${queriedWR} zscore`]
+
+                if (pair1Z > (pair2Z + 1)) {
+                    if (!bestPair) {
+                        bestPair = pair1
+                    } else {
+                        return null
+                    }
+                }
+            }
+        }
+
+        return bestPair
+    }
+}
+
 // onClick callback function for Query Data button, but can be called elsewhere
 function clickQueryData() {
     cardsToDisplay = selectedCards.slice()
