@@ -145,6 +145,13 @@ function gotData() {
 
     for (let key of cardNames) {
         cardPNGs[key] = masterJSON[key]["png"]
+
+        let ifSecret = uncoverGoldSecrets(key)
+
+        if (ifSecret)
+            print(`${key} is secretly gold! ${uncoverGoldSecrets(key)}`)
+        else
+            print(`${key} has no secret to share`)
     }
 }
 
@@ -592,6 +599,17 @@ function cardDataDisplay() {
             mappedZ,
             cellHeight * (i + 1) + cellHeight/2
         )
+
+        // let goldPair = uncoverGoldSecrets(cardName)
+        //
+        // if (goldPair !== null) {
+        //     print(
+        //         `${cardName} is a gold card! ` +
+        //         `Its best stat is ${goldPair}.`
+        //     )
+        // } else {
+        //     print(`${cardName} is not a gold card ;;`)
+        // }
     }
 
     pop()
@@ -755,7 +773,7 @@ function hoverQueryData() {
 // checks if a card is a "secret gold card" or "top secret card" based on
 // its data. returns either null if no secret is found, or the particular
 // secret it uncovered.
-function uncoverSecrets(cardName) {
+function uncoverSecretsHandshake(cardName) {
     let cardData = masterJSON[cardName]
 
     // required for checking if the card data exists, if it's not a color pair
@@ -790,16 +808,50 @@ function uncoverSecrets(cardName) {
     }
 }
 
+
+// same as the above but finds the two largest elements in the color pair
+// zscore list and compares them. if they're 1 zscore apart, then the card
+// is considered "gold" for that color.
+function uncoverGoldSecrets(cardName) {
+    let cardData = masterJSON[cardName]
+
+    // required for checking if the card data exists, if it's not a color pair
+    if (cardData) {
+        let cardStatsAll = cardData["stats"]["all"]
+        let pairs = Object.keys(cardStatsAll)
+
+        let bestZ = null
+        let bestPair = null
+        let secondBestZ = null
+
+        for (let i = 0; i < pairs.length; i++) {
+            let pairZ = cardStatsAll[pairs[i]][`${queriedWR} zscore`]
+            if (pairZ > bestZ) {
+                secondBestZ = bestZ
+                bestZ = pairZ
+                bestPair = pairs[i]
+            } else if (pairZ > secondBestZ) {
+                secondBestZ = pairZ
+            }
+        }
+
+        if (bestZ > secondBestZ + 1) {
+            return bestPair
+        } else {
+            return null
+        }
+    }
+
+    return null
+}
+
+
 // onClick callback function for Query Data button, but can be called elsewhere
 function clickQueryData() {
     cardsToDisplay = selectedCards.slice()
 
     for (let i = 0; i < selectedCards.length; i++) {
         let cardName = selectedCards[i]
-
-        console.log(`${cardName}: ` +
-            JSON.stringify(masterJSON[cardName], null, 2)
-        )
     }
 
     statOrQueryDisplay = !statOrQueryDisplay
