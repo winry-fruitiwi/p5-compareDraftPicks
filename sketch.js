@@ -482,6 +482,21 @@ function cardDataDisplay() {
             cellHeight * (i + 1)
         )
 
+        let goldPair = uncoverGoldSecrets(cardName)
+        if (goldPair) {
+            renderButton(
+                "GOLD",
+                textWidth(" ")*32 + 5*TEXT_BOX_PADDING + textWidth("# played"),
+                cellHeight * (i + 1),
+                textWidth("GOLD") + TEXT_BOX_PADDING*2,
+                cellHeight,
+                () => {},
+                () => {},
+                color(51, 100, 100),
+                color(0, 0, 0)
+            )
+        }
+
         // display alternating color rectangle
         noStroke()
         // this essentially alternates alpha between 0 and 20
@@ -816,7 +831,7 @@ function uncoverGoldSecrets(cardName) {
     let cardData = masterJSON[cardName]
 
     // required for checking if the card data exists, if it's not a color pair
-    if (cardData) {
+    if (cardData && cardData["color"].length <= 1) {
         let cardStatsAll = cardData["stats"]["all"]
         let pairs = Object.keys(cardStatsAll)
 
