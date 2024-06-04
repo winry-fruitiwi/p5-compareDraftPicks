@@ -21,7 +21,8 @@ let variableWidthFont
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 
-
+// controls whether the gold card tag is hovered over
+let ifHover
 
 // the string that you constantly modify by typing. Controls what cards
 // show up in the "what are you searching for?" box underneath the search
@@ -467,6 +468,29 @@ function cardDataDisplay() {
         let rawALSA = winrates[3]
         let numPlayed = winrates[4]
 
+        // display alternating color rectangle
+        noStroke()
+        // this essentially alternates alpha between 0 and 20
+        fill(0, 0, 100, (i + 1) % 2 * 5 + 5)
+
+        // has to account for translations
+        if (mouseX < width &&
+            mouseY < cellHeight * (i+4) &&
+            0 < mouseX &&
+            cellHeight * (i+3) < mouseY &&
+            !ifDisplayCard && !ifHover) {
+            if (mouseJustReleased) {
+                ifDisplayCard = true
+                cardImgName = cardName
+            }
+
+            fill(0, 0, 100, 12)
+        }
+
+        rect(0, cellHeight * (i + 1),
+            width, cellHeight
+        )
+
         textAlign(LEFT, TOP)
         // display card name
         noStroke()
@@ -484,41 +508,36 @@ function cardDataDisplay() {
 
         let goldPair = uncoverGoldSecrets(cardName)
         if (goldPair) {
+            let x = textWidth(" ")*32 + 5*TEXT_BOX_PADDING + textWidth("# played")
+            let y = cellHeight * (i + 1)
+            let w = textWidth("GOLD") + TEXT_BOX_PADDING*2
+            let t = `This card is good in ${goldPair}. Click to view individual stats`
+
+            ifHover = false
+
             renderButton(
                 "GOLD",
-                textWidth(" ")*32 + 5*TEXT_BOX_PADDING + textWidth("# played"),
-                cellHeight * (i + 1),
+                x,
+                y,
                 textWidth("GOLD") + TEXT_BOX_PADDING*2,
                 cellHeight,
-                () => {},
-                () => {},
+                () => {
+                    fill(0, 0, 0)
+                    rect(x + w, y - cellHeight, textWidth(t) + TEXT_BOX_PADDING*2, cellHeight)
+
+                    fill(0, 0, 80)
+                    textAlign(LEFT, TOP)
+                    paddedText(`This card is good in ${goldPair}. Click to view individual stats`, x + w, y - cellHeight)
+                    fill(51, 100, 80)
+
+                    ifHover = true
+                },
+                () => {cardsToDisplay = [cardName]},
                 color(51, 100, 100),
-                color(0, 0, 0)
+                color(0, 0, 0),
+                cellHeight * 2
             )
         }
-
-        // display alternating color rectangle
-        noStroke()
-        // this essentially alternates alpha between 0 and 20
-        fill(0, 0, 100, (i + 1) % 2 * 5 + 5)
-
-        // has to account for translations
-        if (mouseX < width &&
-            mouseY < cellHeight * (i+4) &&
-            0 < mouseX &&
-            cellHeight * (i+3) < mouseY &&
-            !ifDisplayCard) {
-            if (mouseJustReleased) {
-                ifDisplayCard = true
-                cardImgName = cardName
-            }
-
-            fill(0, 0, 100, 12)
-        }
-
-        rect(0, cellHeight * (i + 1),
-            width, cellHeight
-        )
 
         // get the first three digits and round everything else away
         let formattedWR = round(winrate * 1000)
@@ -882,15 +901,16 @@ function clickQueryData() {
 // rFill is the default fill for the rectangle, but is influenced by both
 // onHover and onClick
 // tFill is the standard text fill
-function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill) {
+// hoverShift shifts down the hover check requirements. useful when translating.
+function renderButton(text, x1, y1, w, h, onHover, onClick, rFill, tFill, hoverShift=0) {
     noStroke()
     fill(rFill)
     // handle hovering check. call the callback function
     if (
         x1 < mouseX &&
-        y1 < mouseY &&
+        y1 + hoverShift < mouseY &&
         mouseX < x1 + w &&
-        mouseY < y1 + h &&
+        mouseY < y1 + h + hoverShift &&
         !ifDisplayCard
     ) {
         onHover()
