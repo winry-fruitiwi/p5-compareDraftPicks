@@ -147,10 +147,10 @@ function gotData() {
     for (let key of cardNames) {
         cardPNGs[key] = masterJSON[key]["png"]
 
-        let ifSecret = uncoverGoldSecrets(key)
+        let ifSecret = uncoverTopSecrets(key)
 
         if (ifSecret)
-            print(`${key} is secretly gold! ${uncoverGoldSecrets(key)}`)
+            print(`${key} is top secret! ${uncoverTopSecrets(key)}`)
         else
             print(`${key} has no secret to share`)
     }
@@ -539,6 +539,43 @@ function cardDataDisplay() {
             )
         }
 
+        let topAllDiff = uncoverTopSecrets(cardName)
+        if (topAllDiff) {
+            let x = textWidth(" ")*32 + 5*TEXT_BOX_PADDING + textWidth("# played")
+            x += textWidth("GOLD") + 3*TEXT_BOX_PADDING
+
+            let y = cellHeight * (i + 1)
+
+            let w = textWidth("TOP") + TEXT_BOX_PADDING*2
+
+            let t = `${topAllDiff} z-scores better when played by top players. Click to view`
+
+            ifHover = false
+
+            renderButton(
+                "TOP",
+                x,
+                y,
+                textWidth("TOP") + TEXT_BOX_PADDING*2,
+                cellHeight,
+                () => {
+                    fill(0, 0, 0)
+                    rect(x + w, y - cellHeight, textWidth(t) + TEXT_BOX_PADDING*2, cellHeight)
+
+                    fill(0, 0, 80)
+                    textAlign(LEFT, TOP)
+                    paddedText(t, x + w, y - cellHeight)
+                    fill(185, 4, 55)
+
+                    ifHover = true
+                },
+                () => {cardsToDisplay = [cardName]},
+                color(185, 4, 75),
+                color(0, 0, 0),
+                cellHeight * 2
+            )
+        }
+
         // get the first three digits and round everything else away
         let formattedWR = round(winrate * 1000)
         // after this, convert to a string
@@ -877,6 +914,33 @@ function uncoverGoldSecrets(cardName) {
     }
 
     return null
+}
+
+
+// checks if the top players generally perform better than other players
+function uncoverTopSecrets(cardName) {
+    let cardData = masterJSON[cardName]
+
+    if (cardData) {
+        let cardStatsAll = cardData["stats"]["all"]["all"]
+        let cardStatsTop = cardData["stats"]["top"]["all"]
+
+        if (cardStatsTop && cardStatsAll){
+            let cardZscoreAll = cardStatsAll[`${queriedWR} zscore`]
+            let cardZscoreTop = cardStatsTop[`${queriedWR} zscore`]
+            if (cardZscoreTop > cardZscoreAll + 1) {
+                let zDiff = cardZscoreTop - cardZscoreAll
+                zDiff *= 1000
+                zDiff = str(zDiff)
+                zDiff = zDiff[0] + "." + zDiff[1] + zDiff[2]
+                zDiff = float(zDiff)
+
+                return zDiff
+            }
+        }
+    }
+
+    return false
 }
 
 
