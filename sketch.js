@@ -906,7 +906,7 @@ function uncoverGoldSecrets(cardName) {
             }
         }
 
-        if (bestZ > secondBestZ + 1) {
+        if (bestZ > secondBestZ + 1 && bestPair !== "all") {
             return bestPair
         } else {
             return null
